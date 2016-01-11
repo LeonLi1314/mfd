@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <strong><!DOCTYPE xml></strong> -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                     http://www.springframework.org/schema/context
+                     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                     http://www.springframework.org/schema/aop
+                     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+                     http://www.springframework.org/schema/tx
+                     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	<!-- 将多个配置文件读取到容器中，交给Spring管理 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<!-- <property name="location" value="classpath:druid.properties" /> -->
+		<property name="locations">
+			<list>
+				<!-- 这里支持多种寻址方式：classpath和file -->
+				<!-- <value>classpath:c3p0.properties</value> -->
+				<!-- 推荐使用file的方式引入，这样可以将配置和代码分离 -->
+				<value>classpath:druid.properties</value>
+				<value>classpath:hibernate.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 1.DataSource:druid数据库连接池 -->
+	<bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="filters" value="${filters}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="initialSize" value="${initialSize}" />
+	</bean>
+
+	<!-- 2.sessionFactory -->
+	<bean id="sessionFactory" name="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		abstract="false">
+		<property name="dataSource">
+			<ref bean="druidDataSource" />
+		</property>
+		<!-- oracle中的lob字段处理 -->
+		<!-- <property name="lobHandler"> -->
+		<!-- <bean class="org.springframework.jdbc.support.lob.DefaultLobHandler"/> -->
+		<!-- </property> -->
+		<!-- 1) hibernate 映射文件存放路径。xml文件映射 -->
+		<!-- <property name="mappingLocations"> -->
+		<!-- <list> -->
+		<!-- <value>classpath:/hibernate/*.hbm.xml</value> -->
+		<!-- </list> -->
+		<!-- </property> -->
+		<!--2) 指明使用标注的实体类，逐个配置。注解方式映射 -->
+		<!-- <property name="annotatedClasses"> -->
+		<!-- <list> -->
+		<!-- <value>com.rtmap.traffic.mfd.domain.BasCountry</value> -->
+		<!-- </list> -->
+		<!-- </property> -->
+		<!--3) 包扫描的方式。注解方式映射 -->
+		<property name="packagesToScan">
+			<list>
+				<value>com.rtmap.traffic.mfd.domain.*</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<prop key="hibernate.connection.SetBigStringTryClob">${hibernate.connection.SetBigStringTryClob}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.query.factory_class">${hibernate.query.factory_class}</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+			</props>
+		</property>
+
+		<!-- spring对hibernate3支持属性配置 -->
+		<!-- <property name="eventListeners"> -->
+		<!-- <map> -->
+		<!-- <entry key="merge"> -->
+		<!-- <bean -->
+		<!-- class="org.springframework.orm.hibernate3.support.IdTransferringMergeEventListener" -->
+		<!-- abstract="false" /> -->
+		<!-- </entry> -->
+		<!-- </map> -->
+		<!-- </property> -->
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="druidDataSource" />
+		</property>
+	</bean>
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<!-- 3.transactionManager 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 配置事务异常封装 -->
+	<bean id="persistenceExceptionTranslationPostProcessor"
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!--启动spring事务注解功能 -->
+	<!-- <tx:annotation-driven transaction-manager="txManager"/> -->
+	<!-- 定义切入点，哪些类的哪些方法使用事务 -->
+	<aop:config>
+		<!-- 只对业务逻辑层实施事务 -->
+		<aop:pointcut id="allServiceMethod"
+			expression="execution(* com.rtmap.traffic.mfd.service..*.*(..))" />
+		<!-- Advisor定义，切入点和通知分别为allServiceMethod、txAdvice -->
+		<aop:advisor pointcut-ref="allServiceMethod" advice-ref="txAdvice" />
+	</aop:config>
+	<!-- 定义Advice，配置事务的传播特性、配置事务的隔离级别、配置只读事务、配置回滚策略 -->
+	<tx:advice id="txAdvice">
+		<tx:attributes>
+			<!-- 支持当前事务，如果执行到add开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
+			<tx:method name="add*" propagation="REQUIRED" />
+			<!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
+			<tx:method name="save*" propagation="REQUIRED" />
+			<!-- 支持当前事务，如果执行到update开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
+			<tx:method name="update*" propagation="REQUIRED" />
+			<!-- 支持当前事务，如果执行到delete开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<!-- 支持当前事务，如果执行到handle开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
+			<tx:method name="handle*" propagation="REQUIRED" />
+			<!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+</beans>  
