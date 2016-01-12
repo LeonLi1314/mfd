@@ -210,29 +210,17 @@ public class BscServiceImpl implements IBasService {
 			if (!rst.containsKey(headLetter)) {
 				rst.put(headLetter, new ArrayList<Airline>());
 			}
+			
+			rst.get(headLetter).add(airline);
 		}
 
 		return rst;
 	}
 	
-	private Map<String, List<Airport>> getCityMultiAirports(){
-		List<Airport> airports = airportDao.selectCityMultiAirport();
-		Map<String, List<Airport>> airportMap = new HashMap<>();
-		
-		if(airports != null && airports.size() > 0){
-			for (Airport airport : airports) {
-				if(!airportMap.containsKey(airport.getCityCode())){
-					airportMap.put(airport.getCityCode(), new ArrayList<Airport>());
-				}
-				
-				airportMap.get(airport.getCityCode()).add(airport);
-			}
-		}
-		
-		return airportMap;
-	}
-
-	
+	/**
+	 * 获取城市对应的机场集合
+	 * @return 城市-机场集合
+	 */
 	private Map<String, List<Airport>> getAirports(){
 		List<Airport> airports = airportDao.selectAll();
 		Map<String, List<Airport>> airportMap = new HashMap<>();
