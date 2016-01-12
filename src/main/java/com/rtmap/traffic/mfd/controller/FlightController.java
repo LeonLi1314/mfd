@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author liqingshan 2016-01-11
  *
  */
-@Controller("flt")
+@Controller
+@RequestMapping("flt")
 public class FlightController {
 	/**
 	 * 日志记录器

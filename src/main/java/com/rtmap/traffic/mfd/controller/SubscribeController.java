@@ -15,7 +15,8 @@ import com.rtmap.traffic.mfd.domain.OpRst;
  * @author liqingshan 2016-01-11
  *
  */
-@Controller("sbc")
+@Controller
+@RequestMapping("sbc")
 public class SubscribeController {
 	/**
 	 * 日志记录器

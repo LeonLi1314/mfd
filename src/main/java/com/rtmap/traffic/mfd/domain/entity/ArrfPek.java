@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,6 +18,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "flt_arrf_pek")
 public class ArrfPek {
+	@Id
 	@Column(name = "arrf_id", updatable = false)
 	private String arrfId;
 	@Column(name = "flt_no")
@@ -28,11 +30,11 @@ public class ArrfPek {
 	private String domint;
 	@Column(name = "master_flt_no")
 	private String masterFltNo;
-	@Column(name = "flt_type")
+	@Column(name = "flt_type", columnDefinition = "CHAR", length = 1)
 	private String fltType;
-	@Column(name = "iata")
+	@Column(name = "iata", columnDefinition = "CHAR", length = 2)
 	private String iata;
-	@Column(name = "icao")
+	@Column(name = "icao", columnDefinition = "CHAR", length = 3)
 	private String icao;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_time", columnDefinition = "DATETIME")
@@ -133,7 +135,7 @@ public class ArrfPek {
 	private String sflight3Iata;
 	@Column(name = "sflight4_iata")
 	private String sflight4Iata;
-	@Column(name = "sflight59_iata")
+	@Column(name = "sflight5_iata")
 	private String sflight5Iata;
 	@Column(name = "sflight6_iata")
 	private String sflight6Iata;
