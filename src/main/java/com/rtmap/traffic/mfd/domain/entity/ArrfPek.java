@@ -48,8 +48,8 @@ public class ArrfPek {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "act_time", columnDefinition = "DATETIME")
 	private Date actTime;
-	@Column(name = "task_mature", columnDefinition = "CHAR", length = 1)
-	private String taskMature;
+	@Column(name = "task_nature", columnDefinition = "CHAR", length = 1)
+	private String taskNature;
 	@Column(name = "regist_no")
 	private String registNo;
 	@Column(name = "air_type")
@@ -330,12 +330,12 @@ public class ArrfPek {
 		this.actTime = actTime;
 	}
 
-	public String getTaskMature() {
-		return taskMature;
+	public String getTaskNature() {
+		return taskNature;
 	}
 
-	public void setTaskMature(String taskMature) {
-		this.taskMature = taskMature == null ? null : taskMature.trim();
+	public void setTaskNature(String taskNature) {
+		this.taskNature = taskNature == null ? null : taskNature.trim();
 	}
 
 	public String getRegistNo() {

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="css/list.css">
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script>
+	$(function(){
+		document.documentElement.style.fontSize=document.documentElement.clientWidth/18+'px';});
+	</script>
+</head>
+<body>
+	<div class="wrap">
+		<header>
+			<i class="back"></i>
+			<p>航班动态</p>
+			<i class="notice"></i>
+			<i class="home"></i>
+		</header>
+		<div class="box">
+			<div class="list">
+				<ul>
+					<li class="cur detail-in">
+						<div class="title clearfix">
+							<i class="logo fl"></i>
+							<p class="name fl">中国国际航空CA1234T</p>
+						</div>
+						<div class="sub-title">
+							<p>共享航班：HU7807</p>
+						</div>
+						<div class="detail">	
+							<div class="text clearfix">
+								<p class="fl">实际起飞</p>
+								<p class="fr">预计到达</p>
+							</div>
+							<div class="time clearfix">
+								<p class="fl">23:00</p>
+								<p class="take-off status fl">已起飞</p>
+								<p class="fr">16:00</p>
+							</div>
+							<div class="plan clearfix">
+								<p class="fl">计划 12:00</p>
+								<p class="fr">预计 14:00</p>
+							</div>
+							<div class="weather clearfix">
+								<p class="fl clearfix">
+									<i class="cloud fl"></i>
+									<i class="fl text">-4/12℃</i>
+								</p>
+								<p class="fl clearfix">
+									<i class="sun fl"></i>
+									<i class="fl text">12℃</i>			
+								</p>
+							</div>
+							<div class="addr clearfix">
+								<p class="fl">北京首都T2</p>
+								<p class="fr">广州首都白云T3</p>
+							</div>
+						</div>
+						<div class="open-cont show">
+							<ul class="clearfix">
+								<li>
+									<p class="time">32</p>
+									<p class="text">行李转盘</p>
+								</li>
+								<li>
+									<p class="time">2 <i>分钟</i></p>
+									<p class="text">行李达到时长</p>
+								</li>
+								<li>
+									<p class="time">32 <i>分钟</i></p>
+									<p class="text">出租车等待时长</p>
+								</li>
+							</ul>
+							<div class="traffic">
+							交通出行引导
+							</div>
+							<div class="attention">
+								取消关注
+							</div>
+						</div>		
+					</li>
+				</ul>
+			</div>
+		</div>
+		<footer>
+			<p>提示：由于天气原因，航班大面积延误！</p>
+			<p>您关注的航班CA1234已经开始登机...</p>
+		</footer>
+	</div>
+</body>
+</html>

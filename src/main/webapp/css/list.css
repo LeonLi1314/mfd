@@ -1,0 +1,101 @@
+/*list列表部分*/
+.box{padding-top:2.5rem;}
+.box .title{ font-size:0.63rem; margin-bottom:0.4rem; color:#11a9ec; 
+	padding-top:0.75rem; width:16rem; padding-left:0.1rem;}
+.box .list{width:18rem;}
+.box .list .title{font-size:0.76rem; width:16rem; color:#4f4f5f;}
+.box .list ul li{padding:0 1rem 0.45rem; 
+	border-bottom:1px solid #d8d8db; width:16rem;}
+.box .list ul li .title{margin-bottom:0.5rem;}
+.box .list ul li .title .logo{display:block;background:url(../images/logo.png)
+ no-repeat; background-size:cover; width:0.76rem; height:0.76rem; 
+margin-right:0.4rem;}
+.box .list ul li .title .logo2{display:block;background:url(../images/logo_2.png)
+ no-repeat; background-size:cover; width:0.76rem; height:0.76rem; 
+margin-right:0.4rem;}
+.box .list ul li .title .cancel{font-size:0.63rem; padding-top:0.13rem; color:#11a9ec;}
+.box .list ul li .detail{position:relative;}
+.box .list ul li .detail div{width:16rem;}
+.box .list ul li .detail div p{ font-size:0.63rem; color:#4f4f5f;}
+.box .list ul li .detail .time{width:13.68rem; margin-bottom:0.15rem; 
+	padding:0 1.16rem; position:relative;}
+.box .list ul li .detail .time p{font-size:1.18rem; color:#4f4f5f;
+width:3rem; text-align: center;}
+.box .list ul li .detail .time .status{width:5rem;font-size:0.97rem; 
+	margin-left:-2.5rem;}
+.box .list ul li .detail .time .status.take-off{color:green;}
+.box .list ul li .detail .addr{width:16rem;font-size:0.63rem;
+ margin-bottom:0.3rem;}
+.box .list ul li .detail .addr p:nth-child(1){width:4.6rem;}
+.box .list ul li .detail .addr p:nth-child(2){width:5.2rem;}
+.box .list ul li .detail .addr p{text-align: center; color:#a9a9a9;}
+.box .list ul li .detail .status{width:4rem; height:1rem;
+	text-align:center; line-height:1rem;position:absolute; left:50%; top:50%;
+	margin-left:-2rem; margin-top:-0.5rem;font-size:0.63rem; font-weight: bold;}
+.box .list ul li .detail .take-off{color:#f04507;}
+.box .list ul li .detail .boarding{color:green;}
+.box .list ul li .detail .check-in{color:green;}
+.box .list ul li .detail .delay{color:#eb2c2c;}
+
+.box .list ul li.cur{position:relative; padding-bottom:1rem; margin-bottom:0.5rem; }
+.box .list ul li.cur .title{margin-bottom:0.3rem;}
+.box .list ul li.cur .sub-title{font-size:0.63rem; 
+	color:#9b9ba8; padding-left:1.16rem; margin-bottom:0.7rem;}
+.box .list ul li.cur .detail .text{position:relative;}
+.box .list ul li .detail .plan,
+.box .list ul li .detail .weather,
+.box .list ul li .detail .text{width:13.68rem;
+	padding:0 1.18rem; margin-bottom:0.15rem;}
+.box .list ul li .detail .plan{margin-bottom:0.7rem;}
+.box .list ul li .detail .text p{font-size:0.76rem;}
+.box .list ul li .detail .plan p{font-size:0.63rem; color:#9b9ba8;width:3.1rem; text-align: center;}
+.box .list ul li .detail .weather{margin:0.625rem 0;}
+.box .list ul li .detail .weather{padding:0 0 0 1.18rem;width:14.86rem;}
+.box .list ul li .detail .weather p{width:6.84rem;}
+.box .list ul li .detail .weather p:nth-child(2){padding-left:3.64rem;width:3.2rem;}
+.box .list ul li .detail .weather .cloud{width:1.4rem; height:1.25rem; 
+	background:url(../images/cloud.png) no-repeat;background-size:contain;
+display:block; margin-right:0.3rem;}
+.box .list ul li .detail .weather .sun{width:1.4rem; height:1.25rem; 
+	background:url(../images/sun.png) no-repeat; background-size:contain;
+}
+.box .list ul li .detail .weather .text{font-size:0.5rem; color:#9b9ba8;
+ padding:0.7rem 0 0; width:1rem;}
+.box .list ul li .open{width:18rem;}
+.box .list ul li .open p{font-size:0.5rem; color:#9b9ba8; width:2rem; 
+	text-align: center;
+	position:absolute;left:50%; bottom:0.5rem;margin-left:-1rem;}
+.box .list ul li .line-down{background:url(../images/line_down.png) no-repeat;
+	 width:24px;height:12px; position:absolute; left:50%;
+	  bottom:-12px;
+	 margin-left:-12px;}
+.box .list ul li .close{width:18rem;}
+.box .list ul li .close p{font-size:0.5rem; color:#9b9ba8; width:2rem; text-align: center;
+	position:absolute;left:50%; bottom:-1.5rem; margin-left:-1rem;}
+.box .list ul li .line-up{background:url(../images/line_up.png) no-repeat;
+ width:24px;height:12px; position:absolute; left:50%;
+  bottom:-1px;
+ margin-left:-12px;}
+.box .list ul li .open-cont{display:none;}
+.box .list ul li .open-cont.show{display:block;}
+.box .list ul li .open-cont ul{ margin:1.4rem 0 1.9rem;}
+.box .list ul li .open-cont ul li{ text-align: center; 
+	color:#4f4f5f; border:none; padding:0; float:left; width:5rem;
+	 box-sizing:border-box; }
+.box .list ul li .open-cont ul li:nth-child(1){padding:0 1.16rem; text-align: left;}
+.list ul li .open-cont ul li:nth-child(3){padding-left:1rem; width:5.6rem;}
+.box .list ul li .open-cont ul li:nth-child(2){padding-left:0.8rem;}
+.box .list ul li .open-cont ul li:nth-child(3){padding-left:1rem; width:5.6rem;}
+.box .list ul li .open-cont ul li:nth-child(1) p:nth-child(1){text-align: center;}
+.box .list ul li .open-cont ul li .time{font-size:0.97rem;}
+.box .list ul li .open-cont ul li .time i{font-size:0.5rem;}
+.box .list ul li .open-cont ul li .text{font-size:0.63rem;}
+.box .list ul li .open-cont .traffic,
+.box .list ul li .open-cont .attention{width:16rem; height:1.67rem;
+text-align: center; line-height: 1.67rem; color:#fff; background:#11a9ec;
+margin-bottom:0.5rem; border-radius:0.15rem; font-size:0.7rem;}
+.box .list ul li .open-cont .close{margin-top:0.3rem;}
+
+.box .list ul li.detail-in{border:none;}
+.box .list ul li .open-cont .preorder{color:#9b9ba8; font-size:0.5rem;
+	margin-bottom:1rem; width:100%; text-align: center;}

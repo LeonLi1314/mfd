@@ -1,11 +1,14 @@
 package com.rtmap.traffic.mfd.domain.dto;
 
+import com.alibaba.fastjson.annotation.JSONType;
+
 /**
  * 出发或目的地数据传输对象
  * 
  * @author liqingshan 2016-01-11
  *
  */
+@JSONType(orders = "", ignores = "")
 public class StartingOrDestinationDto {
 	private String code;
 	private String nameCn;
@@ -16,6 +19,7 @@ public class StartingOrDestinationDto {
 
 	/**
 	 * 获取编码（对应城市或机场编码）
+	 * 
 	 * @return 编码
 	 */
 	public String getCode() {
@@ -24,7 +28,9 @@ public class StartingOrDestinationDto {
 
 	/**
 	 * 设置编码
-	 * @param code 城市或机场编码
+	 * 
+	 * @param code
+	 *            城市或机场编码
 	 */
 	public void setCode(String code) {
 		this.code = code;
@@ -64,6 +70,7 @@ public class StartingOrDestinationDto {
 
 	/**
 	 * 获取类型（0:城市；1:机场）
+	 * 
 	 * @return 对象类型
 	 */
 	public int getType() {
@@ -72,7 +79,9 @@ public class StartingOrDestinationDto {
 
 	/**
 	 * 设置类型
-	 * @param type 对象类型（0:城市；1:机场）
+	 * 
+	 * @param type
+	 *            对象类型（0:城市；1:机场）
 	 */
 	public void setType(int type) {
 		this.type = type;
