@@ -12,10 +12,14 @@
                      http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	<import resource="spring-hibernate.xml" />
 	<!-- 自动扫描 -->
-	<context:component-scan base-package="com.rtmap.traffic.mfd.*" >
+	<context:component-scan base-package="com.rtmap.traffic.mfd.*">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
+
+	<bean id="pageCond" class="com.rtmap.traffic.mfd.domain.cond.PageCond">
+		<property name="pageSize" value="10" />
+	</bean>
 </beans>
 
 

@@ -73,12 +73,22 @@ public class ArrfPek {
 	private String startAirportEn;
 	@Column(name = "start_airport_cn")
 	private String startAirportCn;
+	@Column(name = "start_sdt")
+	private Date startSdt;
 	@Column(name = "flt_state_code")
 	private String fltStateCode;
 	@Column(name = "flt_state_en")
 	private String fltStateEn;
+	@Column(name = "flt_state_en_abbr")
+	private String fltStateEnAbbr;
+	@Column(name = "flt_state_en_spec")
+	private String fltStateEnSpec;
 	@Column(name = "flt_state_cn")
 	private String fltStateCn;
+	@Column(name = "flt_state_cn_abbr")
+	private String fltStateCnAbbr;
+	@Column(name = "flt_state_cn_spec")
+	private String fltStateCnSpec;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cancel_time", columnDefinition = "DATETIME")
 	private Date cancelTime;
@@ -426,6 +436,14 @@ public class ArrfPek {
 		this.startAirportCn = startAirportCn == null ? null : startAirportCn.trim();
 	}
 
+	public Date getStartSdt() {
+		return startSdt;
+	}
+
+	public void setStartSdt(Date startSdt) {
+		this.startSdt = startSdt;
+	}
+
 	public String getFltStateCode() {
 		return fltStateCode;
 	}
@@ -442,12 +460,44 @@ public class ArrfPek {
 		this.fltStateEn = fltStateEn == null ? null : fltStateEn.trim();
 	}
 
+	public String getFltStateEnAbbr() {
+		return fltStateEnAbbr;
+	}
+
+	public void setFltStateEnAbbr(String fltStateEnAbbr) {
+		this.fltStateEnAbbr = fltStateEnAbbr;
+	}
+
+	public String getFltStateEnSpec() {
+		return fltStateEnSpec;
+	}
+
+	public void setFltStateEnSpec(String fltStateEnSpec) {
+		this.fltStateEnSpec = fltStateEnSpec;
+	}
+
 	public String getFltStateCn() {
 		return fltStateCn;
 	}
 
 	public void setFltStateCn(String fltStateCn) {
 		this.fltStateCn = fltStateCn == null ? null : fltStateCn.trim();
+	}
+
+	public String getFltStateCnAbbr() {
+		return fltStateCnAbbr;
+	}
+
+	public void setFltStateCnAbbr(String fltStateCnAbbr) {
+		this.fltStateCnAbbr = fltStateCnAbbr;
+	}
+
+	public String getFltStateCnSpec() {
+		return fltStateCnSpec;
+	}
+
+	public void setFltStateCnSpec(String fltStateCnSpec) {
+		this.fltStateCnSpec = fltStateCnSpec;
 	}
 
 	public Date getCancelTime() {

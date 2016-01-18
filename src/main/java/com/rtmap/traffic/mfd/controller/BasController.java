@@ -18,6 +18,8 @@ import com.rtmap.traffic.mfd.domain.entity.Airline;
 import com.rtmap.traffic.mfd.domain.entity.Country;
 import com.rtmap.traffic.mfd.service.IBasService;
 
+import lqs.frame.util.DateUtils;
+
 /**
  * 基础数据控制器
  * 
@@ -56,7 +58,9 @@ public class BasController extends UniformController {
 	@ResponseBody
 	@RequestMapping(value = "/currentDateTime.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	public Date getCurrentDateTime() {
-		return new Date();
+		Date curr = DateUtils.parseDate("2016-01-10");
+		return curr;
+		// return new Date();
 	}
 
 	/**

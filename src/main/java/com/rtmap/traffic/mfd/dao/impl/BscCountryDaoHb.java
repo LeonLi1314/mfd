@@ -2,9 +2,6 @@ package com.rtmap.traffic.mfd.dao.impl;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.rtmap.traffic.mfd.dao.IBscCountryDao;
@@ -17,21 +14,33 @@ import com.rtmap.traffic.mfd.domain.entity.Country;
  *
  */
 @Repository
-public class BscCountryDaoHb implements IBscCountryDao {
+public class BscCountryDaoHb extends DaoHbSupport implements IBscCountryDao {
 	// @Resource(name = "sessionFactory")
 	// private SessionFactory sessionFactory;
-	@Resource
-	HibernateTemplate hibernateTemplate;
-
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Country> selectAll() {
+		// 1.template查询
 		String hsql = "from Country";
 
-		return (List<Country>) hibernateTemplate.find(hsql);
+		return (List<Country>) getHibernateTemplate().find(hsql);
+
+		// 2.使用Hql查询
+		// String hsql = "from Country";
 		// Session session = sessionFactory.getCurrentSession();
 		// Query query = session.createQuery(hsql);
 		//
 		// return query.list();
+
+		// String hsql = "from Country where countryCode like ? ";
+		// Session session = sessionFactory.getCurrentSession();
+		// Query query = session.createQuery(hsql);
+		// query.setString("subname","%C%");
+		// return query.list();
+
+		// QBC查询
+		// Criteria cr = session.createCriteria(Country.class);
+		// cr.add(Expression.like("subname","%C%"));
+
 	}
 }

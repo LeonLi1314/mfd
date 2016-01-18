@@ -2,6 +2,7 @@ package com.rtmap.traffic.mfd.domain.dto;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.rtmap.traffic.mfd.domain.ArrdepFlag;
 
 /**
@@ -24,6 +25,7 @@ public class FltInfoDto {
 	private String startAirportCn;
 	private String destAirportCn;
 	private String stateCn;
+	private int contractId;
 
 	public String getFltId() {
 		return fltId;
@@ -65,6 +67,7 @@ public class FltInfoDto {
 		this.arrdep = arrdep;
 	}
 
+	@JSONField(format = "HH:mm")
 	public Date getStartSdt() {
 		return startSdt;
 	}
@@ -73,6 +76,7 @@ public class FltInfoDto {
 		this.startSdt = startSdt;
 	}
 
+	@JSONField(format = "HH:mm")
 	public Date getDestSdt() {
 		return destSdt;
 	}
@@ -103,5 +107,13 @@ public class FltInfoDto {
 
 	public void setStateCn(String stateCn) {
 		this.stateCn = stateCn;
+	}
+
+	public int getContractId() {
+		return contractId;
+	}
+
+	public void setContractId(int contractId) {
+		this.contractId = contractId;
 	}
 }

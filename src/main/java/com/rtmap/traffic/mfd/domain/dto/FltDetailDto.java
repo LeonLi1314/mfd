@@ -28,7 +28,9 @@ public class FltDetailDto extends FltInfoDto {
 	 * 离港资源信息
 	 */
 	private String cntDisp = "未分配";
+	private String firstCntOt;
 	private String gatDisp = "未分配";
+	private String firstGatOt;
 	private String securityDur;
 
 	public boolean isFollow() {
@@ -127,12 +129,28 @@ public class FltDetailDto extends FltInfoDto {
 		this.cntDisp = cntDisp;
 	}
 
+	public String getFirstCntOt() {
+		return firstCntOt;
+	}
+
+	public void setFirstCntOt(String firstCntOt) {
+		this.firstCntOt = firstCntOt;
+	}
+
 	public String getGatDisp() {
 		return gatDisp;
 	}
 
 	public void setGatDisp(String gatDisp) {
 		this.gatDisp = gatDisp;
+	}
+
+	public String getFirstGatOt() {
+		return firstGatOt;
+	}
+
+	public void setFirstGatOt(String firstGatOt) {
+		this.firstGatOt = firstGatOt;
 	}
 
 	public String getSecurityDur() {

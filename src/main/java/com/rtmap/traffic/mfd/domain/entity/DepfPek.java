@@ -66,8 +66,14 @@ public class DepfPek {
 	private String park;
 	@Column(name = "cnt_disp")
 	private String cntDisp;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "first_cnt_ot", columnDefinition = "DATETIME")
+	private Date firstCntOt;
 	@Column(name = "gat_disp")
 	private String gatDisp;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "first_gat_ot", columnDefinition = "DATETIME")
+	private Date firstGatOt;
 	@Column(name = "route")
 	private String route;
 	@Column(name = "dest_airport_code")
@@ -76,12 +82,22 @@ public class DepfPek {
 	private String destAirportCn;
 	@Column(name = "dest_airport_en")
 	private String destAirportEn;
+	@Column(name = "dest_sdt")
+	private Date destSdt;
 	@Column(name = "flt_state_code")
 	private String fltStateCode;
 	@Column(name = "flt_state_en")
 	private String fltStateEn;
+	@Column(name = "flt_state_en_abbr")
+	private String fltStateEnAbbr;
+	@Column(name = "flt_state_en_spec")
+	private String fltStateEnSpec;
 	@Column(name = "flt_state_cn")
 	private String fltStateCn;
+	@Column(name = "flt_state_cn_abbr")
+	private String fltStateCnAbbr;
+	@Column(name = "flt_state_cn_spec")
+	private String fltStateCnSpec;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cancel_time", columnDefinition = "DATETIME")
 	private Date cancelTime;
@@ -414,12 +430,28 @@ public class DepfPek {
 		this.cntDisp = cntDisp == null ? null : cntDisp.trim();
 	}
 
+	public Date getFirstCntOt() {
+		return firstCntOt;
+	}
+
+	public void setFirstCntOt(Date firstCntOt) {
+		this.firstCntOt = firstCntOt;
+	}
+
 	public String getGatDisp() {
 		return gatDisp;
 	}
 
 	public void setGatDisp(String gatDisp) {
 		this.gatDisp = gatDisp == null ? null : gatDisp.trim();
+	}
+
+	public Date getFirstGatOt() {
+		return firstGatOt;
+	}
+
+	public void setFirstGatOt(Date firstGatOt) {
+		this.firstGatOt = firstGatOt;
 	}
 
 	public String getRoute() {
@@ -454,6 +486,14 @@ public class DepfPek {
 		this.destAirportEn = destAirportEn;
 	}
 
+	public Date getDestSdt() {
+		return destSdt;
+	}
+
+	public void setDestSdt(Date destSdt) {
+		this.destSdt = destSdt;
+	}
+
 	public String getFltStateCode() {
 		return fltStateCode;
 	}
@@ -470,12 +510,44 @@ public class DepfPek {
 		this.fltStateEn = fltStateEn == null ? null : fltStateEn.trim();
 	}
 
+	public String getFltStateEnAbbr() {
+		return fltStateEnAbbr;
+	}
+
+	public void setFltStateEnAbbr(String fltStateEnAbbr) {
+		this.fltStateEnAbbr = fltStateEnAbbr;
+	}
+
+	public String getFltStateEnSpec() {
+		return fltStateEnSpec;
+	}
+
+	public void setFltStateEnSpec(String fltStateEnSpec) {
+		this.fltStateEnSpec = fltStateEnSpec;
+	}
+
 	public String getFltStateCn() {
 		return fltStateCn;
 	}
 
 	public void setFltStateCn(String fltStateCn) {
 		this.fltStateCn = fltStateCn == null ? null : fltStateCn.trim();
+	}
+
+	public String getFltStateCnAbbr() {
+		return fltStateCnAbbr;
+	}
+
+	public void setFltStateCnAbbr(String fltStateCnAbbr) {
+		this.fltStateCnAbbr = fltStateCnAbbr;
+	}
+
+	public String getFltStateCnSpec() {
+		return fltStateCnSpec;
+	}
+
+	public void setFltStateCnSpec(String fltStateCnSpec) {
+		this.fltStateCnSpec = fltStateCnSpec;
 	}
 
 	public Date getCancelTime() {

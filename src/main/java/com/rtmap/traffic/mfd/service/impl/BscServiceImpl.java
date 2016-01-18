@@ -7,8 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.rtmap.traffic.mfd.dao.IBscAirlineDao;
@@ -37,22 +35,18 @@ import lqs.frame.util.StringUtils;
  */
 @Service
 public class BscServiceImpl implements IBasService {
-	/**
-	 * 日志记录器
-	 */
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Resource
-	IBscCountryDao basCountryDao;
+	private IBscCountryDao basCountryDao;
 	@Resource
-	IBscCityDao cityDao;
+	private IBscCityDao cityDao;
 	@Resource
-	IHotCityDao hotCityDao;
+	private IHotCityDao hotCityDao;
 	@Resource
-	IBscAirportDao airportDao;
+	private IBscAirportDao airportDao;
 	@Resource
-	IBscAirlineDao airlineDao;
+	private IBscAirlineDao airlineDao;
 	@Resource
-	IHotAirlineDao hotAirlineDao;
+	private IHotAirlineDao hotAirlineDao;
 	private final String hotKey = "HOT";
 
 	@Override
@@ -102,8 +96,8 @@ public class BscServiceImpl implements IBasService {
 		// 组装第一字母对应的城市组
 		if (cities == null && cities.size() == 0)
 			return rst;
-		
-		Map<String, List<Airport>> airportMap = getAirports();
+
+		Map<String, List<Airport>> airportMap = getCityAirportMap();
 
 		for (City city : cities) {
 			String firstLeter = city.getFirstLetter();
@@ -126,11 +120,11 @@ public class BscServiceImpl implements IBasService {
 			sd.setNameEn(city.getNameCn());
 			sd.setType(0);
 			rst.get(headLetter).add(sd);
-			
-			if(city.getAirportCount() <= 1)
+
+			if (city.getAirportCount() <= 1)
 				continue;
 
-			//一个城市下多个机场，将机场拼接到城市下
+			// 一个城市下多个机场，将机场拼接到城市下
 			List<Airport> airports = airportMap.get(city.getCityCode());
 			for (Airport airport : airports) {
 				sd = new StartingOrDestinationDto();
@@ -210,31 +204,90 @@ public class BscServiceImpl implements IBasService {
 			if (!rst.containsKey(headLetter)) {
 				rst.put(headLetter, new ArrayList<Airline>());
 			}
-			
+
 			rst.get(headLetter).add(airline);
 		}
 
 		return rst;
 	}
-	
+
 	/**
 	 * 获取城市对应的机场集合
+	 * 
 	 * @return 城市-机场集合
 	 */
-	private Map<String, List<Airport>> getAirports(){
+	@Override
+	public Map<String, List<Airport>> getCityAirportMap() {
 		List<Airport> airports = airportDao.selectAll();
 		Map<String, List<Airport>> airportMap = new HashMap<>();
-		
-		if(airports != null && airports.size() > 0){
+
+		if (airports != null && airports.size() > 0) {
 			for (Airport airport : airports) {
-				if(!airportMap.containsKey(airport.getCityCode())){
+				if (!airportMap.containsKey(airport.getCityCode())) {
 					airportMap.put(airport.getCityCode(), new ArrayList<Airport>());
 				}
-				
+
 				airportMap.get(airport.getCityCode()).add(airport);
 			}
 		}
-		
+
 		return airportMap;
+	}
+
+	@Override
+	public Map<String, Airport> getAirportMap() {
+		Map<String, Airport> rst = new HashMap<>();
+		List<Airport> airports = airportDao.selectAll();
+
+		for (Airport airport : airports) {
+			rst.put(airport.getAirportCode(), airport);
+		}
+
+		return rst;
+	}
+
+	@Override
+	public Map<String, Airline> getAirlineMap() {
+		Map<String, Airline> rst = new HashMap<>();
+		List<Airline> airlines = airlineDao.selectAll();
+
+		for (Airline airline : airlines) {
+			rst.put(airline.getAirlineCode(), airline);
+		}
+		
+		return rst;
+	}
+
+	@Override
+	public String getAirportNameCnByCode(String airportCode) {
+		Map<String, Airport> map = getAirportMap();
+		
+		if(map.containsKey(airportCode)){
+			return map.get(airportCode).getNameCn();
+		}
+		
+		return null;
+	}
+
+	@Override
+	public String getAirlineNameCnByCode(String airlineCode) {
+		Map<String, Airline> map = getAirlineMap();
+
+		if(map.containsKey(airlineCode)){
+			return map.get(airlineCode).getNameCn();
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public List<Airport> getAirportsByCityCode(String cityCode){
+		Map<String, List<Airport>> map = getCityAirportMap();
+		
+		if(map.containsKey(cityCode)){
+			return map.get(cityCode);
+		}
+		
+		return null;
 	}
 }

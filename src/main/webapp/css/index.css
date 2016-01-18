@@ -1,3 +1,6 @@
+.loading{width:16rem; height:2rem;display:none;}
+.loading i{width:2rem; height:2rem; background:url(../images/roller.gif) no-repeat;
+background-size:cover; margin:0 auto; display: block;}
 .box{padding-top:2.5rem;}
 .box .flight,.box .address{padding:0 1rem; width:16rem;}
 .box .nav{margin:1rem 1rem 0.9rem; width:16rem; height:1.6rem;overflow: hidden;border:1px solid #767676; 
@@ -17,7 +20,8 @@
 .box .flight-date .title{margin-bottom:0.65rem;}
 .box .flight-date .sub-nav{width:16rem; height:1.33rem;border:1px solid #767676; 
 	border-radius:0.15rem; box-sizing:border-box; overflow: hidden; margin-bottom:0.92rem;}
-.box .flight-date .sub-nav ul{width:16rem; height:1.33rem; display:-webkit-box;}
+.box .flight-date .sub-nav ul{width:16rem; height:1.33rem; display:-webkit-box;
+margin-left:-1px; box-sizing:border-box;}
 .box .flight-date .sub-nav li{height:1.33rem; text-align: center;
 line-height: 1.33rem; border-left:1px solid #767676;
 	-webkit-box-flex:1;  font-size:0.7rem;}

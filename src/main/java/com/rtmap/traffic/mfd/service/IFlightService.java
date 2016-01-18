@@ -5,6 +5,7 @@ import com.rtmap.traffic.mfd.domain.cond.ArrdepPlaceCond;
 import com.rtmap.traffic.mfd.domain.cond.FltIdCond;
 import com.rtmap.traffic.mfd.domain.cond.FltNoCond;
 import com.rtmap.traffic.mfd.domain.cond.PageCond;
+import com.rtmap.traffic.mfd.domain.cond.SubscriberCond;
 import com.rtmap.traffic.mfd.domain.dto.FltDetailDto;
 import com.rtmap.traffic.mfd.domain.dto.FltInfoDto;
 
@@ -44,11 +45,11 @@ public interface IFlightService {
 	FltDetailDto getFlightDetailByFltIdCond(FltIdCond cond);
 
 	/**
-	 * 获取当前用户关注的航班列表
+	 * 获取用户关注的航班列表
 	 * 
-	 * @param openId
-	 *            用户公众号唯一标识
+	 * @param cond
+	 *           订阅者查询条件
 	 * @return 航班列表
 	 */
-	PageRst<FltInfoDto> getFollowedFlights(String openId);
+	PageRst<FltInfoDto> getFollowedFlights(SubscriberCond cond);
 }

@@ -124,18 +124,16 @@
 		<tx:attributes>
 			<!-- 支持当前事务，如果执行到add开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
 			<tx:method name="add*" propagation="REQUIRED" />
-			<!-- 支持当前事务，如果执行到save开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
 			<tx:method name="save*" propagation="REQUIRED" />
-			<!-- 支持当前事务，如果执行到update开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
 			<tx:method name="update*" propagation="REQUIRED" />
-			<!-- 支持当前事务，如果执行到delete开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
 			<tx:method name="delete*" propagation="REQUIRED" />
-			<!-- 支持当前事务，如果执行到handle开头的任何方法时没有事务则开启一个事务 这是最常见的方式 -->
 			<tx:method name="handle*" propagation="REQUIRED" />
 			<!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
 			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
-			<!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
 			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="follow*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="unfollow*" propagation="SUPPORTS"
+				read-only="true" />
 			<tx:method name="*" />
 		</tx:attributes>
 	</tx:advice>

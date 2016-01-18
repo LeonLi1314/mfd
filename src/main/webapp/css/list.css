@@ -1,5 +1,5 @@
 /*list列表部分*/
-.box{padding-top:2.5rem;}
+.box{padding-top:2.5rem; }
 .box .title{ font-size:0.63rem; margin-bottom:0.4rem; color:#11a9ec; 
 	padding-top:0.75rem; width:16rem; padding-left:0.1rem;}
 .box .list{width:18rem;}
@@ -7,7 +7,7 @@
 .box .list ul li{padding:0 1rem 0.45rem; 
 	border-bottom:1px solid #d8d8db; width:16rem;}
 .box .list ul li .title{margin-bottom:0.5rem;}
-.box .list ul li .title .logo{display:block;background:url(../images/logo.png)
+.box .list ul li .title .logo{display:block;background:url(../images/gh.png)
  no-repeat; background-size:cover; width:0.76rem; height:0.76rem; 
 margin-right:0.4rem;}
 .box .list ul li .title .logo2{display:block;background:url(../images/logo_2.png)
@@ -23,7 +23,7 @@ margin-right:0.4rem;}
 width:3rem; text-align: center;}
 .box .list ul li .detail .time .status{width:5rem;font-size:0.97rem; 
 	margin-left:-2.5rem;}
-.box .list ul li .detail .time .status.take-off{color:green;}
+.box .list ul li .detail .time .status.green{color:green;}
 .box .list ul li .detail .addr{width:16rem;font-size:0.63rem;
  margin-bottom:0.3rem;}
 .box .list ul li .detail .addr p:nth-child(1){width:4.6rem;}
@@ -32,10 +32,8 @@ width:3rem; text-align: center;}
 .box .list ul li .detail .status{width:4rem; height:1rem;
 	text-align:center; line-height:1rem;position:absolute; left:50%; top:50%;
 	margin-left:-2rem; margin-top:-0.5rem;font-size:0.63rem; font-weight: bold;}
-.box .list ul li .detail .take-off{color:#f04507;}
-.box .list ul li .detail .boarding{color:green;}
-.box .list ul li .detail .check-in{color:green;}
-.box .list ul li .detail .delay{color:#eb2c2c;}
+.box .list ul li .detail .yellow{color:#f04507;}
+.box .list ul li .detail .red{color:#eb2c2c;}
 
 .box .list ul li.cur{position:relative; padding-bottom:1rem; margin-bottom:0.5rem; }
 .box .list ul li.cur .title{margin-bottom:0.3rem;}

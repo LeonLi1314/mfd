@@ -15,7 +15,7 @@ import com.alibaba.fastjson.annotation.JSONType;
  */
 @Entity
 @Table(name = "bas_airline")
-@JSONType(ignores = {"domint", "nameAbbrCn"})
+@JSONType(ignores = {"domint"})
 public class Airline {
 	@Id
 	@Column(name = "airline_code", columnDefinition = "CHAR", length = 2)
