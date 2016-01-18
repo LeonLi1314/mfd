@@ -54,6 +54,84 @@ public class BscServiceImpl implements IBasService {
 		return basCountryDao.selectAll();
 	}
 
+	/**
+	 * 获取所有城市
+	 * 
+	 * @return 城市列表
+	 */
+	private List<City> getCities() {
+		return cityDao.selectAll();
+	}
+
+	/**
+	 * 获取国内城市
+	 * 
+	 * @return 国内城市列表
+	 */
+	private List<City> getDomesticCities() {
+		return cityDao.selectDomestic();
+	}
+
+	/**
+	 * 获取国际城市
+	 * 
+	 * @return 国际城市列表
+	 */
+	private List<City> getInternationalCities() {
+		return cityDao.selectInternational();
+	}
+
+	/**
+	 * 获取所有航站
+	 * 
+	 * @return 航站列表
+	 */
+	private List<Airport> getAirports() {
+		return airportDao.selectAll();
+	}
+	
+	/**
+	 * 获取所有航空公司
+	 * 
+	 * @return 航空公司列表
+	 */
+	private List<Airline> getAirlines() {
+		return airlineDao.selectAll();
+	}
+
+	/**
+	 * 获取国内航空公司
+	 * 
+	 * @return 国内航空公司列表
+	 */
+	private List<Airline> getDomesticAirlines() {
+		return airlineDao.selectDomestic();
+	}
+
+	/**
+	 * 获取国际航空公司
+	 * 
+	 * @return 国际航空公司列表
+	 */
+	private List<Airline> getInternationalAirlines() {
+		return airlineDao.selectInternational();
+	}
+
+	/**
+	 * 根据航站编码获取所在城市编码
+	 * @param airportCode 航站编码
+	 * @return 所在城市编码
+	 */
+	private String getCityCodeByAirportCode(String airportCode) {
+		List<Airport> airports = getAirports();
+		for (Airport airport : airports) {
+			if (airport.getAirportCode().equals(airportCode))
+				return airport.getCityCode();
+		}
+
+		return null;
+	}
+
 	@Override
 	public Map<String, List<StartingOrDestinationDto>> getDomesticGroupedCities(String currAirportCode) {
 		return getGroupedCities(currAirportCode, DomintFlag.D);
@@ -72,10 +150,10 @@ public class BscServiceImpl implements IBasService {
 
 		if (DomintFlag.D == domint) {
 			hotCities = hotCityDao.selectDomesticByCurrentAirport(currAirportCode);
-			cities = cityDao.selectDomestic();
+			cities = getDomesticCities();
 		} else {
 			hotCities = hotCityDao.selectInternationalByCurrentAirport(currAirportCode);
-			cities = cityDao.selectInternational();
+			cities = getInternationalCities();
 		}
 
 		// 组装热门城市
@@ -93,6 +171,8 @@ public class BscServiceImpl implements IBasService {
 			}
 		}
 
+		String cityCode = getCityCodeByAirportCode(currAirportCode);
+
 		// 组装第一字母对应的城市组
 		if (cities == null && cities.size() == 0)
 			return rst;
@@ -100,6 +180,10 @@ public class BscServiceImpl implements IBasService {
 		Map<String, List<Airport>> airportMap = getCityAirportMap();
 
 		for (City city : cities) {
+			// 排除当前视角城市
+			if(city.getCityCode().equals(cityCode))
+				continue;
+			
 			String firstLeter = city.getFirstLetter();
 
 			if (StringUtils.isNullOrEmpty(firstLeter)) {
@@ -167,10 +251,10 @@ public class BscServiceImpl implements IBasService {
 
 		if (DomintFlag.D == domint) {
 			hotAirlines = hotAirlineDao.selectDomesticByCurrAirport(currAirportCode);
-			airlines = airlineDao.selectDomestic();
+			airlines = getDomesticAirlines();
 		} else {
 			hotAirlines = hotAirlineDao.selectInternationalByCurrAirport(currAirportCode);
-			airlines = airlineDao.selectInternational();
+			airlines = getInternationalAirlines();
 		}
 
 		// 组装热门航空公司
@@ -218,7 +302,7 @@ public class BscServiceImpl implements IBasService {
 	 */
 	@Override
 	public Map<String, List<Airport>> getCityAirportMap() {
-		List<Airport> airports = airportDao.selectAll();
+		List<Airport> airports = getAirports();
 		Map<String, List<Airport>> airportMap = new HashMap<>();
 
 		if (airports != null && airports.size() > 0) {
@@ -237,7 +321,7 @@ public class BscServiceImpl implements IBasService {
 	@Override
 	public Map<String, Airport> getAirportMap() {
 		Map<String, Airport> rst = new HashMap<>();
-		List<Airport> airports = airportDao.selectAll();
+		List<Airport> airports = getAirports();
 
 		for (Airport airport : airports) {
 			rst.put(airport.getAirportCode(), airport);
@@ -249,23 +333,23 @@ public class BscServiceImpl implements IBasService {
 	@Override
 	public Map<String, Airline> getAirlineMap() {
 		Map<String, Airline> rst = new HashMap<>();
-		List<Airline> airlines = airlineDao.selectAll();
+		List<Airline> airlines = getAirlines();
 
 		for (Airline airline : airlines) {
 			rst.put(airline.getAirlineCode(), airline);
 		}
-		
+
 		return rst;
 	}
 
 	@Override
 	public String getAirportNameCnByCode(String airportCode) {
 		Map<String, Airport> map = getAirportMap();
-		
-		if(map.containsKey(airportCode)){
+
+		if (map.containsKey(airportCode)) {
 			return map.get(airportCode).getNameCn();
 		}
-		
+
 		return null;
 	}
 
@@ -273,21 +357,21 @@ public class BscServiceImpl implements IBasService {
 	public String getAirlineNameCnByCode(String airlineCode) {
 		Map<String, Airline> map = getAirlineMap();
 
-		if(map.containsKey(airlineCode)){
+		if (map.containsKey(airlineCode)) {
 			return map.get(airlineCode).getNameCn();
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
-	public List<Airport> getAirportsByCityCode(String cityCode){
+	public List<Airport> getAirportsByCityCode(String cityCode) {
 		Map<String, List<Airport>> map = getCityAirportMap();
-		
-		if(map.containsKey(cityCode)){
+
+		if (map.containsKey(cityCode)) {
 			return map.get(cityCode);
 		}
-		
+
 		return null;
 	}
 }

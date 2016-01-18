@@ -243,11 +243,11 @@ public class FlightServiceImpl implements IFlightService {
 		SubscriberCond suberCond = new SubscriberCond();
 		suberCond.setSubscriberId(cond.getSubscriberId());
 		SubscribeContract contract = subscribeService.getContractByFltIdCond(cond);
-		if(contract != null){
+		if (contract != null) {
 			fltInfo.setFollow(true);
 			fltInfo.setContractId(contract.getContractId());
 		}
-		
+
 		return fltInfo;
 	}
 
@@ -301,7 +301,9 @@ public class FlightServiceImpl implements IFlightService {
 
 	/**
 	 * 获取到港航班的共享航班号串
-	 * @param arrf 到港航班信息
+	 * 
+	 * @param arrf
+	 *            到港航班信息
 	 * @return 共享航班号串
 	 */
 	private String getArrfShareFltNos(ArrfPek arrf) {
@@ -326,7 +328,9 @@ public class FlightServiceImpl implements IFlightService {
 
 	/**
 	 * 获取离港航班的共享航班号串
-	 * @param depf 离港航班信息
+	 * 
+	 * @param depf
+	 *            离港航班信息
 	 * @return 共享航班号串
 	 */
 	private String getDepfShareFltNos(DepfPek depf) {
@@ -351,8 +355,11 @@ public class FlightServiceImpl implements IFlightService {
 
 	/**
 	 * 根据到港航班信息赋值航班详情数据传输对象
-	 * @param arrf 到港航班
-	 * @param fltDetailDto 航班详情数据传输对象
+	 * 
+	 * @param arrf
+	 *            到港航班
+	 * @param fltDetailDto
+	 *            航班详情数据传输对象
 	 */
 	private void assignByArrfPek(ArrfPek arrf, FltDetailDto fltDetailDto) {
 		// 预计飞行时长（毫秒）
@@ -381,8 +388,11 @@ public class FlightServiceImpl implements IFlightService {
 
 	/**
 	 * 根据离港航班信息赋值航班详情数据传输对象
-	 * @param arrf 离港航班
-	 * @param fltDetailDto 航班详情数据传输对象
+	 * 
+	 * @param arrf
+	 *            离港航班
+	 * @param fltDetailDto
+	 *            航班详情数据传输对象
 	 */
 	private void assignByDepfPek(DepfPek depf, FltDetailDto fltDetailDto) {
 		// 预计飞行时长（毫秒）
@@ -456,5 +466,65 @@ public class FlightServiceImpl implements IFlightService {
 		}
 
 		return pageRst;
+	}
+
+	private void caculateArrfState(ArrfPek arrfPek) {
+		String stateCnAbbr;
+
+		switch (arrfPek.getDelayReasonCode()) {
+		case "DVT":
+			stateCnAbbr = "备降";
+			break;
+		case "RTN":
+			stateCnAbbr = "返航";
+			break;
+		case "CAN":
+			stateCnAbbr = "取消";
+			break;
+		case "DLY":
+			if (arrfPek.getActTime() != null) {
+				stateCnAbbr = "已到达";
+			} else {
+				stateCnAbbr = "延误";
+			}
+			break;
+		default:
+			stateCnAbbr = "未到达";
+			break;
+		}
+	}
+
+	private void caculateDepfState(DepfPek depfPek) {
+		String stateCnAbbr;
+
+		switch (depfPek.getDelayReasonCode()) {
+		case "DVT":
+			stateCnAbbr = "备降";
+			break;
+		case "RTN":
+			stateCnAbbr = "返航";
+			break;
+		case "CAN":
+			stateCnAbbr = "取消";
+			break;
+		case "DLY":
+			if (depfPek.getActTime() != null) {
+				stateCnAbbr = "已起飞";
+			} else if (depfPek.getLastTime() != null) {
+				stateCnAbbr = "最后登机提示";
+			} else if (depfPek.getFltStateCode() == "BOB") {
+				stateCnAbbr = "开始登机";
+			} else {
+				stateCnAbbr = "延误";
+			}
+			break;
+		default:
+			if (depfPek.getFirstCntOt() != null) {
+				stateCnAbbr = "开始值机";
+			} else {
+				stateCnAbbr = "未开放值机";
+			}
+			break;
+		}
 	}
 }

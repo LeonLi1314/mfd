@@ -9,10 +9,12 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rtmap.traffic.mfd.domain.OpRst;
 import com.rtmap.traffic.mfd.domain.dto.StartingOrDestinationDto;
 import com.rtmap.traffic.mfd.domain.entity.Airline;
 import com.rtmap.traffic.mfd.domain.entity.Country;
@@ -49,6 +51,23 @@ public class BasController extends UniformController {
 	 */
 	@Resource
 	IBasService basService;
+
+	/**
+	 * 获取服务器端当前时间
+	 * 
+	 * @return 返回服务器当前时间
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/test.do", method = { RequestMethod.POST, RequestMethod.GET  }, produces = "application/json;charset=UTF-8")
+	public OpRst test(@RequestBody Country country) {
+		OpRst rst = new OpRst();
+		if (country != null) {
+			rst.setSuccess(true);
+			rst.setMsg("测试成功！");
+		}
+
+		return rst;
+	}
 
 	/**
 	 * 获取服务器端当前时间
