@@ -21,17 +21,17 @@ public class FltDetailDto extends FltInfoDto {
 	/*
 	 * 到港资源信息
 	 */
-	private String bltDisp = "未分配";
+	private String bltDisp = "-";
 	private String firstBltOt;
 	private String taxiWait;
 	/*
 	 * 离港资源信息
 	 */
-	private String cntDisp = "未分配";
+	private String cntDisp = "-";
 	private String firstCntOt;
-	private String gatDisp = "未分配";
+	private String gatDisp = "-";
 	private String firstGatOt;
-	private String securityDur;
+	private String securityDur = "15";
 
 	public boolean isFollow() {
 		return isFollow;

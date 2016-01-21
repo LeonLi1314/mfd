@@ -19,6 +19,7 @@ import com.rtmap.traffic.mfd.domain.cond.ArrdepPlaceCond;
 import com.rtmap.traffic.mfd.domain.cond.FltIdCond;
 import com.rtmap.traffic.mfd.domain.cond.FltNoCond;
 import com.rtmap.traffic.mfd.domain.cond.PageCond;
+import com.rtmap.traffic.mfd.domain.cond.ShakeCond;
 import com.rtmap.traffic.mfd.domain.cond.SubscriberCond;
 import com.rtmap.traffic.mfd.domain.dto.FltDetailDto;
 import com.rtmap.traffic.mfd.domain.dto.FltInfoDto;
@@ -39,8 +40,8 @@ import lqs.frame.util.StringUtils;
  * @author liqingshan 2016-01-11
  *
  */
-@Service
-public class FlightServiceImpl implements IFlightService {
+@Service("pekService")
+public class FlightPekServiceImpl implements IFlightService {
 	@Resource
 	private IFltArrfPekDao fltArrfPekDao;
 	@Resource
@@ -49,7 +50,7 @@ public class FlightServiceImpl implements IFlightService {
 	private IBasService basService;
 	@Resource
 	private ISubscribeService subscribeService;
-	private String currentAirportCn = "北京首都";
+	private String currentAirportCn = "北京";
 
 	@Override
 	public PageRst<FltInfoDto> getFlightsByFltNoCond(PageCond<FltNoCond> pageCond) {
@@ -178,12 +179,12 @@ public class FlightServiceImpl implements IFlightService {
 			assignByArrfPek(arrf, fltInfo);
 			fltInfo.setFltType(arrf.getFltType());
 
-			if (FltTypeConst.MAIN == fltInfo.getFltType()) {
+			if (FltTypeConst.MAIN.equals(fltInfo.getFltType())) {
 				fltInfo.setRelFltDesc(FltTypeConst.SHARE_DESC);
 				// 拼接共享航班号
 				fltInfo.setRelFltNos(getArrfShareFltNos(arrf));
 
-			} else if (FltTypeConst.SHARE == fltInfo.getFltType()) {
+			} else if (FltTypeConst.SHARE.equals(fltInfo.getFltType())) {
 				fltInfo.setRelFltDesc(FltTypeConst.MAIN_DESC);
 				// 获取主航班号
 				fltInfo.setRelFltNos(arrf.getMasterFltNo());
@@ -209,11 +210,11 @@ public class FlightServiceImpl implements IFlightService {
 			assignByDepfPek(depf, fltInfo);
 			fltInfo.setFltType(depf.getFltType());
 
-			if (FltTypeConst.MAIN == fltInfo.getFltType()) {
+			if (FltTypeConst.MAIN.equals(fltInfo.getFltType())) {
 				fltInfo.setRelFltDesc(FltTypeConst.SHARE_DESC);
 				// 拼接共享航班号
 				fltInfo.setRelFltNos(getDepfShareFltNos(depf));
-			} else if (FltTypeConst.SHARE == fltInfo.getFltType()) {
+			} else if (FltTypeConst.SHARE.equals(fltInfo.getFltType())) {
 				fltInfo.setRelFltDesc(FltTypeConst.MAIN_DESC);
 				// 获取主航班号
 				fltInfo.setRelFltNos(depf.getMasterFltNo());
@@ -309,18 +310,35 @@ public class FlightServiceImpl implements IFlightService {
 	private String getArrfShareFltNos(ArrfPek arrf) {
 		String sfltNos = "";
 
-		if (!StringUtils.isNullOrEmpty(arrf.getRoute1())) {
-			sfltNos += arrf.getRoute1();
-		} else if (!StringUtils.isNullOrEmpty(arrf.getRoute2())) {
-			sfltNos += "," + arrf.getRoute2();
-		} else if (!StringUtils.isNullOrEmpty(arrf.getRoute3())) {
-			sfltNos += "," + arrf.getRoute3();
-		} else if (!StringUtils.isNullOrEmpty(arrf.getRoute4())) {
-			sfltNos += "," + arrf.getRoute4();
-		} else if (!StringUtils.isNullOrEmpty(arrf.getRoute5())) {
-			sfltNos += "," + arrf.getRoute5();
-		} else if (!StringUtils.isNullOrEmpty(arrf.getRoute6())) {
-			sfltNos += "," + arrf.getRoute6();
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight1())) {
+			sfltNos += arrf.getSflight1();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight2())) {
+			sfltNos += "," + arrf.getSflight2();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight3())) {
+			sfltNos += "," + arrf.getSflight3();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight4())) {
+			sfltNos += "," + arrf.getSflight4();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight5())) {
+			sfltNos += "," + arrf.getSflight5();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight6())) {
+			sfltNos += "," + arrf.getSflight6();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight7())) {
+			sfltNos += "," + arrf.getSflight7();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight8())) {
+			sfltNos += "," + arrf.getSflight8();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight9())) {
+			sfltNos += "," + arrf.getSflight9();
+		}
+		if (!StringUtils.isNullOrEmpty(arrf.getSflight10())) {
+			sfltNos += "," + arrf.getSflight10();
 		}
 
 		return sfltNos;
@@ -336,18 +354,35 @@ public class FlightServiceImpl implements IFlightService {
 	private String getDepfShareFltNos(DepfPek depf) {
 		String sfltNos = "";
 
-		if (!StringUtils.isNullOrEmpty(depf.getRoute1())) {
-			sfltNos += depf.getRoute1();
-		} else if (!StringUtils.isNullOrEmpty(depf.getRoute2())) {
-			sfltNos += "," + depf.getRoute2();
-		} else if (!StringUtils.isNullOrEmpty(depf.getRoute3())) {
-			sfltNos += "," + depf.getRoute3();
-		} else if (!StringUtils.isNullOrEmpty(depf.getRoute4())) {
-			sfltNos += "," + depf.getRoute4();
-		} else if (!StringUtils.isNullOrEmpty(depf.getRoute5())) {
-			sfltNos += "," + depf.getRoute5();
-		} else if (!StringUtils.isNullOrEmpty(depf.getRoute6())) {
-			sfltNos += "," + depf.getRoute6();
+		if (!StringUtils.isNullOrEmpty(depf.getSflight1())) {
+			sfltNos += depf.getSflight1();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight2())) {
+			sfltNos += "," + depf.getSflight2();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight3())) {
+			sfltNos += "," + depf.getSflight3();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight4())) {
+			sfltNos += "," + depf.getSflight4();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight5())) {
+			sfltNos += "," + depf.getSflight5();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight6())) {
+			sfltNos += "," + depf.getSflight6();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight7())) {
+			sfltNos += "," + depf.getSflight7();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight8())) {
+			sfltNos += "," + depf.getSflight8();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight9())) {
+			sfltNos += "," + depf.getSflight9();
+		}
+		if (!StringUtils.isNullOrEmpty(depf.getSflight10())) {
+			sfltNos += "," + depf.getSflight10();
 		}
 
 		return sfltNos;
@@ -370,20 +405,20 @@ public class FlightServiceImpl implements IFlightService {
 		// 如果实际时间不为空取实际；实际时间为空取预计时间；预计时间为空取计划时间
 		Date destTime;
 		if (arrf.getActTime() != null) {
-			fltDetailDto.setStartTimeName("实际到达");
+			fltDetailDto.setDestTimeName("实际到达");
 			destTime = arrf.getActTime();
 		} else if (arrf.getEstTime() != null) {
-			fltDetailDto.setStartTimeName("预计到达");
+			fltDetailDto.setDestTimeName("预计到达");
 			destTime = arrf.getEstTime();
 		} else {
-			fltDetailDto.setStartTimeName("预计到达");
+			fltDetailDto.setDestTimeName("预计到达");
 			destTime = arrf.getSdt();
 		}
 
 		Date startTime = new Date(destTime.getTime() - diff);
 		fltDetailDto.setStartTime(DateUtils.formatDate(startTime, "HH:mm"));
 		fltDetailDto.setDestTime(DateUtils.formatDate(destTime, "HH:mm"));
-		fltDetailDto.setDestTimeName("预计起飞");
+		fltDetailDto.setStartTimeName("预计起飞");
 	}
 
 	/**
@@ -468,6 +503,12 @@ public class FlightServiceImpl implements IFlightService {
 		return pageRst;
 	}
 
+	/**
+	 * 计算到港航班状态
+	 * 
+	 * @param arrfPek
+	 *            到港航班
+	 */
 	private void caculateArrfState(ArrfPek arrfPek) {
 		String stateCnAbbr;
 
@@ -494,6 +535,12 @@ public class FlightServiceImpl implements IFlightService {
 		}
 	}
 
+	/**
+	 * 计算离港航班状态
+	 * 
+	 * @param depfPek
+	 *            离港航班
+	 */
 	private void caculateDepfState(DepfPek depfPek) {
 		String stateCnAbbr;
 
@@ -526,5 +573,17 @@ public class FlightServiceImpl implements IFlightService {
 			}
 			break;
 		}
+	}
+
+	@Override
+	public List<FltInfoDto> getLimitFlightsByShakeCond(ShakeCond cond) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<FltInfoDto> getFlightsByShakeCond(ShakeCond cond) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -32,13 +31,10 @@ public class SubscribeContractDaoHb extends DaoHbSupport implements ISubscribeCo
 
 	@Override
 	public int delete(int contractId) {
-		Session session = getCurrentSession();
-		session.beginTransaction();  
-		Query query = session.createQuery("update SubscribeContract set deleteFlag = 'Y',updateTime = :updateTime where contractId = :contractId");
+		Query query = createQuery("update SubscribeContract set deleteFlag = 'Y',updateTime = :updateTime where contractId = :contractId");
 		query.setTimestamp("updateTime", new Date());
 		query.setInteger("contractId", contractId);
 		int i = query.executeUpdate();
-		session.getTransaction().commit();  
 		return i;
 	}
 

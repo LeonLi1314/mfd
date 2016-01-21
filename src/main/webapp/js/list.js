@@ -1,55 +1,35 @@
 $(function(){
-    var str=window.location.search;
-    //pageNo=1&code=HGH&arrdep=1&type=0&airlineCode=&queryDate=1452684775440
-    /*var json={};
-    var arr=str.split('&');
-    for(var i=0; i<arr.length; i++)
-    {
-    	var arrTmp=arr[i].split('=');
-    	json[arrTmp[0]]=arrTmp[1];
-    }
-    console.log(json);*/
+	document.documentElement.style.fontSize=document.documentElement.clientWidth/18+'px';
+	var str=window.location.search.substring(1);
+    var pageNo=1;
+    var data=JSON.parse(decodeURIComponent(str));
+    //页面初始化执行的函数
     if(str.indexOf('fltNo')!=-1)
     {
-	    $.ajax({
-	    	url:'/mfd/flt/getByFltNoCond.do'+str,
-	    	success:function(data)
-	    	{
-	    		createList(data.rst);
-	    		$('.list ul li').on('click',function(){
-	    			var str=$(this).attr('data-detail');
-	    			var arrdep=$(this).attr('data-arrdep');
-	    			if(arrdep=='A')
-	    			{
-	    				window.open('detail_in.html?'+str);
-	    			}else if(arrdep=='D')
-	    			{
-	    				window.open('detail_out.html?'+str);
-	    			}
-					
-				});
-	    	}
-	    });
-    }else
+    	if(localStorage.listFltCache)
+    	{
+    		$('.loading').hide();
+    		var data=JSON.parse(localStorage.listFltCache);
+    		createList(data);
+    		gotoDetail();
+    	}
+    	else
+    	{
+    		 ajaxNum(1);
+    	}
+    }else if(str.indexOf('airlineCode')!=-1)
     {
-    	$.ajax({
-    		url:'/mfd/flt/getByPlaceCond.do'+str,
-	    	success:function(data)
-	    	{
-	    		createList(data.rst);
-	    		$('.list ul li').on('click',function(){
-	    			var str=$(this).attr('data-detail');
-					var arrdep=$(this).attr('data-arrdep');
-	    			if(arrdep=='A')
-	    			{
-	    				window.open('detail_in.html?'+str);
-	    			}else if(arrdep=='D')
-	    			{
-	    				window.open('detail_out.html?'+str);
-	    			}
-				});
-	    	}
-	    });
+    	if(localStorage.listAddCache)
+    	{
+    		var data=JSON.parse(localStorage.listAddCache);
+			createList(data);
+    		$('.loading').hide();
+    		gotoDetail();
+    	}
+    	else
+    	{
+    		ajaxAddress(1);
+    	}
     }
 	//创建列表
 	function createList(arr)
@@ -57,7 +37,6 @@ $(function(){
 		for(var i=0; i<arr.length; i++)
 		{
 			var json=arr[i];
-			var sClass=statusCheck(json['stateCn']);
 			var oLi=$('<li data-detail='+encodeURIComponent(JSON.stringify(json))+' data-arrdep='+json['arrdep']+' data-fltId='+json['fltId']+'><div class="title clearfix">'+
 							'<i class="logo fl"></i>'+
 							'<p class="name fl">'+json['airlineNameCn']+json['fltNo']+'</p>'+
@@ -71,81 +50,121 @@ $(function(){
 								'<p class="fl">'+json['startAirportCn']+'</p>'+
 								'<p class="fr">'+json['destAirportCn']+'</p>'+
 							'</div>'+
-							'<p class="status '+sClass+'">'+json['stateCn']+'</p>'+
-						'</div></li>');
+							'<p class="status">'+json['stateCn']+'</p>'+
+						'</div><a></a></li>');
 			oLi.appendTo($('.box .list>ul'));
 			oLi.find('.logo').css({
-				'background':'url(images/'+json['iata']+'.png) no-repeat',
+				'background':'url(images/'+json['iata']+'.gif) no-repeat',
 				'backgroundSize':'cover'
 			});
+			oLi.find('.status').css('color',json['stateColor']);
 		}
 	}
-	//判断状态
-	function statusCheck(status)
+	//跳转详情页面
+	function gotoDetailClickEvent()
 	{
-		var sClass='';
-		switch(status){
-			case '已起飞':
-				sClass='green';
-				break;
-			case '延误':
-				sClass='red';
-				break;
-			case '未开始值机':
-				sClass='yellow';
-				break;
-			case '开始登机':
-				sClass='green';
-				break;
-			defaule:
-				sClass='';
+		var str=$(this).attr('data-detail');
+		var arrdep=$(this).attr('data-arrdep');
+		if(arrdep=='A')
+		{
+			$(this).find('a').attr('href','detail_in.html?'+str);
+		}else if(arrdep=='D')
+		{
+			$(this).find('a').attr('href','detail_out.html?'+str);
+		}					
+	}
+	function gotoDetail()
+	{
+		$('.list ul li').off('click',gotoDetailClickEvent).on('click',gotoDetailClickEvent);
+	}
+	//按航班号查询请求成功后的函数
+	function queryFlightNum(data)
+	{
+		if(data)
+		{
+			if(data.rst.length>0)
+			{
+	    		if(data.totalPage>=pageNo)
+	    		{
+	    			$('.loading').hide();
+		    		createList(data.rst);
+		    		gotoDetail();
+		    		localStorage.listFltCache=JSON.stringify(data.rst);
+	    		}
+			}else
+			{
+				$('.loading').hide();
+				$('.msg').show();
+				$('.msg').html('没有查到更多的航班信息');
+			}
 		}
-		return sClass
+	}
+	function ajaxNum(pageNo)
+	{
+	    data.pageNo=pageNo;
+	    ajaxInvoke('/mfd/flt/getByFltNoCond.do',data,queryFlightNum);
+	}
+	//按起降地查询请求成功后的函数
+	function queryFlightAdd(data)
+	{
+		if(data)
+		{
+			if(data.rst.length>0)
+			{
+	    		if(data.totalPage>=pageNo)
+	    		{
+	    			createList(data.rst);
+		    		$('.loading').hide();
+		    		localStorage.listAddCache=JSON.stringify(data.rst);
+		    		gotoDetail();
+	    		}
+			}else
+			{
+				$('.loading').hide();
+				$('.msg').show();
+				$('.msg').html('没有查到更多的航班信息');
+			}
+		}else
+		{		
+			$('.loading').hide();
+			$('.msg').show();
+			$('.msg').html('没有查到更多的航班信息');
+		}
+		
+	}
+	function ajaxAddress(pageNo)
+	{
+	    data.pageNo=pageNo;
+	    ajaxInvoke('/mfd/flt/getByPlaceCond.do',data,queryFlightAdd);
 	}
 	var oList=$('.list');
 	var oBox=$('.box');
-	oBox.css({
-		'height':'24.5rem',
-		'overflow':'hidden',
-		'position':'relative'
+	//页面滚动
+	$(document).scroll(function(){
+		var scrollTop=$(document).scrollTop();
+		var oBoxTop=27*parseInt(document.documentElement.style.fontSize);
+		var top=oList.outerHeight()-oBoxTop;
+		if(scrollTop>=top)
+		{
+			$('.msg').show();
+			pageNo++;
+		    if(str.indexOf('fltNo')!=-1)
+		    {
+			    ajaxNum(pageNo);
+		    }else
+		    {
+		    	ajaxAddress(pageNo);
+		    }
+		}else
+		{
+			$('.loading').hide();
+			$('.msg').hide();
+		}
 	});
-	oList.css({
-		'position':'absolute',
-		'left':0,
-		'top':'2.5rem',
-	});
-	var minTop=oList.height()-$(oBox).innerHeight();
-	drag(oList[0]);
-	function drag(oDiv){
-		var y=0;
-		oDiv.addEventListener('touchstart',function(ev){
-			var disY=ev.targetTouches[0].pageY-y;
-			var id=ev.targetTouches[0].identifier;
-			
-			function fnMove(ev){
-				if(ev.targetTouches[0].identifier==id){
-					y=ev.targetTouches[0].pageY-disY;
-					if(y>0)
-					{
-						y=0;
-					}else if(y<-Math.abs(minTop))
-					{
-						y=-Math.abs(minTop);
-					}
-					console.log(y);
-					oDiv.style.WebkitTransform='translate(0,'+y+'px)';
-					ev.preventDefault();	
-				}
-			}
-			function fnEnd(ev){
-				if(ev.changedTouches[0].identifier==id){
-					document.removeEventListener('touchmove',fnMove,false);
-					document.removeEventListener('touchend',fnEnd,false);		
-				}
-			}			
-			document.addEventListener('touchmove',fnMove,false);			
-			document.addEventListener('touchend',fnEnd,false);
-		},false);
+	//后退
+	function backFn()
+	{
+		window.history.back();
 	}
-	
+	$('.back').on('click',backFn);	
 });

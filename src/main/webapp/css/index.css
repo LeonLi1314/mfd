@@ -1,10 +1,7 @@
-.loading{width:16rem; height:2rem;display:none;}
-.loading i{width:2rem; height:2rem; background:url(../images/roller.gif) no-repeat;
-background-size:cover; margin:0 auto; display: block;}
-.box{padding-top:2.5rem;}
+
 .box .flight,.box .address{padding:0 1rem; width:16rem;}
 .box .nav{margin:1rem 1rem 0.9rem; width:16rem; height:1.6rem;overflow: hidden;border:1px solid #767676; 
-	border-radius: 0.15rem; box-sizing:border-box;}
+	border-radius: 0.15rem; box-sizing:border-box;left:0; top:1.5rem;background:#f1f3f4; z-index:2;}
 .box .nav ul{width:16rem;height:1.6rem;display:-webkit-box;}
 .box .nav ul li{-webkit-box-flex:1;height:1.6rem;text-align: center;
 	line-height: 1.6rem; border-left:1px solid #767676; 
@@ -14,7 +11,7 @@ background-size:cover; margin:0 auto; display: block;}
 .box .cont{display:none;}
 .box .cont.active{display:block;}
 .box .enter{width:16rem; padding:0.1rem 0 0.35rem 0; height:0.9rem; font-size:0.9rem;
- border-bottom:1px solid #d8d8db;}
+ border-bottom:1px solid #d8d8db; color:#000;}
 .box .flight-num .enter{margin-bottom:0.65rem;}
 .box .flight-date{margin-bottom:1.35rem;}
 .box .flight-date .title{margin-bottom:0.65rem;}
@@ -36,11 +33,12 @@ color:#d8d8db; font-size:0.65rem; text-align:center; line-height: 1rem;}
 .box .flight-date .date ul li.active p:nth-child(1){color:#11a9ec;}
 .box .select{width:16rem; background:#11a9ec; height:1.67rem;
 text-align: center; line-height: 1.67rem; color:#fff; font-size:0.7rem;
-margin-bottom:3.43rem; border-radius: 0.15rem;}
+margin-bottom:1rem; border-radius: 0.15rem; display:block;}
 .box .address .add-inp{position:relative;}
 .box .address .add-inp .cut{width:1.66rem; height:1.66rem; 
 	background:url(../images/cut.png) no-repeat; background-size:cover; position:absolute;
-right:1.35rem; top:50%; margin-top:-0.83rem; }
+right:1.35rem; top:50%; margin-top:-0.83rem;}
+.box .flight .history{display:none;}
 .box .flight .history .time{width:16rem;height:0.75rem; position:relative;}
 .box .flight .history .time .left,
 .box .flight .history .time .right
@@ -60,7 +58,7 @@ line-height: 2.4rem; color:#4f4f5f;}
 /*城市选择部分*/
 .city{display:none;}
 .company{display:none;}
-.city,.company{position:fixed; left:0; top:2.5rem;background:#f1f3f4; }
+.city,.company{-position:fixed; left:0; top:2.5rem;background:#f1f3f4; }
 .list .search{padding:0.35rem 0; border-bottom:1px solid #d8d8db; 
 	margin-bottom:0.67rem;}
 .list .search p{background:url(../images/search.png) no-repeat; width:2.5rem;
@@ -93,8 +91,9 @@ line-height: 1.5rem; color:#4f4f5f;margin:0 0 0.3rem 0; width:16rem; background:
 text-align: left;}
 .list .list-cont .cont .hot .title{margin-bottom:0.4rem;}
 .list .list-cont .cont .letter .title{margin-bottom:0.3rem;}
+.list .list-cont .cont .letter .title-box{border-bottom:1px solid #d8d8db;}
 .list .list-cont .cont .letter .sub-title{font-size:0.63rem; color:#09091a;
-padding:0.3rem 0;  border-bottom:1px solid #d8d8db;}
+padding:0.3rem 0;   width:6rem;}
 .list .list-cont .cont .letter .letter-name .sub-cont{margin-bottom:0.5rem;
 border-bottom:1px solid #d8d8db; display:none; overflow:hidden;}
 .list .list-cont .cont .letter .letter-name .sub-cont ul{margin-top:-1px; }

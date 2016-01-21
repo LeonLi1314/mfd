@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="css/index.css">
 	<link rel="stylesheet" href="css/list.css">
 	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/common.js"></script>
 	<script src="js/index.js"></script>
 </head>
 <body>
@@ -22,7 +23,7 @@
 			<div class="nav">
 				<ul>
 					<li class="left btn active">按航班号</li>
-					<li class="btn">按起降地</li>
+					<li class="btn ">按起降地</li>
 					<li class="btn">我关注的</li>
 				</ul>
 			</div>
@@ -36,8 +37,8 @@
 					<p class="title">航班日期</p>
 					<div class="sub-nav">
 						<ul>
-							<li>出发日期</li>
-							<li class="active">到达日期</li>
+							<li class="active">出发日期</li>
+							<li>到达日期</li>
 						</ul>
 					</div>
 					<div class="date change">
@@ -51,9 +52,9 @@
 						</ul>
 					</div>
 				</div>
-				<div class="select">
+				<a class="select">
 					查询
-				</div>
+				</a>
 				<div class="history">
 					<div class="time">
 						<p class="left"></p>
@@ -62,9 +63,7 @@
 					</div>
 					<div class="his-list">
 						<ul>
-							<li>CA528553</li>
-							<li>CA528553</li>
-							<li>CA528553</li>
+							<!--<li>CA528553</li>-->
 						</ul>
 					</div>
 				</div>
@@ -73,17 +72,17 @@
 				<div class="add-inp">
 					<div class="start">
 						<p class="title">出发地</p>
-						<input type="text" class="enter selectable" value="广州" data-id="HAE" data-type="0">
+						<input type="text" class="enter selectable" readonly value="广州" data-id="CAN" data-type="0">
 					</div>
 					<div class="target">
 						<p class="title">目的地</p>
-						<input type="text" class="enter" value="北京" disabled data-id="BJS">
+						<input type="text" class="enter currCity" value="北京" readonly >
 					</div>
 					<div class="cut"></div>
 				</div>
 				<div class="aircompany">
 					<p class="title">航空公司</p>
-					<input type="text" class="enter aircom" placeholder="如CA12321或1231" data-id="WYE">
+					<input type="text" class="enter aircom" placeholder="请选择航空公司" data-id="" readonly>
 				</div>
 				<div class="flight-date">
 					<p class="title">航班日期</p>
@@ -107,13 +106,13 @@
 						</ul>
 					</div>
 				</div>
-				<div class="select">
+				<a class="select">
 					查询
-				</div>
+				</a>
 			</div>
 			<div class="cont list">
 				<ul class="cont-ul">
-					<li class="cur">
+					<!--<li class="cur">
 						<div class="title clearfix">
 							<i class="logo fl"></i>
 							<p class="name fl">菲律宾宿务太平洋航空CA1234T</p>
@@ -199,68 +198,17 @@
 							</div>
 							<p class="take-off status">未开放值机</p>
 						</div>
-					</li>
-					<li>
-						<div class="title clearfix">
-							<i class="logo fl"></i>
-							<p class="name fl">菲律宾宿务太平洋航空CA1234T</p>
-							<p class="cancel fr">取消关注</p>
-						</div>
-						<div class="detail">
-							<div class="time clearfix">
-								<p class="fl">13:00</p>
-								<p class="fr">16:00</p>
-							</div>
-							<div class="addr clearfix">
-								<p class="fl">北京首都T2</p>
-								<p class="fr">广州首都白云T3</p>
-							</div>
-							<p class="take-off status">未开放值机</p>
-						</div>
-					</li>
-					<li>
-						<div class="title clearfix">
-							<i class="logo fl"></i>
-							<p class="name fl">菲律宾宿务太平洋航空CA1234T</p>
-							<p class="cancel fr">取消关注</p>
-						</div>
-						<div class="detail">
-							<div class="time clearfix">
-								<p class="fl">13:00</p>
-								<p class="fr">16:00</p>
-							</div>
-							<div class="addr clearfix">
-								<p class="fl">北京首都T2</p>
-								<p class="fr">广州首都白云T3</p>
-							</div>
-							<p class="take-off status">未开放值机</p>
-						</div>
-					</li>
-					<li>
-						<div class="title clearfix">
-							<i class="logo fl"></i>
-							<p class="name fl">菲律宾宿务太平洋航空CA1234T</p>
-							<p class="cancel fr">取消关注</p>
-						</div>
-						<div class="detail">
-							<div class="time clearfix">
-								<p class="fl">13:00</p>
-								<p class="fr">16:00</p>
-							</div>
-							<div class="addr clearfix">
-								<p class="fl">北京首都T2</p>
-								<p class="fr">广州首都白云T3</p>
-							</div>
-							<p class="take-off status">未开放值机</p>
-						</div>
-					</li>
+					</li>-->
 				</ul>
+				<div class="shadow">
+					您没有关注任何信息
+				</div>
 			</div>
 		</div>
 		<div class="city list">
 			<div class="search clearfix">
 				<p class="fl"></p>
-				<input class="fl" type="text" placeholder="中文/英文/拼音/首字母">
+				<input class="fl" type="text" placeholder="中文/英文/拼音/首字母" value=''>
 			</div>
 			<ul class="search-list">	
 			</ul>
@@ -270,9 +218,6 @@
 						<li class="btn active">国内</li>
 						<li class="btn">国际/港澳台</li>
 					</ul>
-				</div>
-				<div class="loading">
-					<i></i>
 				</div>
 				<div class="cont active domestic">
 					<div class="hot">
@@ -346,9 +291,6 @@
 						<li class="btn">国际/港澳台</li>
 					</ul>
 				</div>
-				<div class="loading">
-					<i></i>
-				</div>
 				<div class="cont active domestic">
 					<div class="hot">
 						<div class="title">热门搜索</div>
@@ -401,6 +343,9 @@
 				</div>
 			</div>
 		</div>
+		<!--<div class="loading">
+			<i></i>
+		</div>-->
 		<footer>
 			<p>提示：由于天气原因，航班大面积延误！</p>
 			<p>您关注的航班CA1234已经开始登机...</p>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	div{width:100px; height:100px; background:#ccc;}
+	</style>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script>
+	$(function(){
+		var json={"countryCode":"SHA","nameAbbrCn":"海南航空公司","nameCn":"上海","nameEn":"SHANGHAI"};
+		//console.log(json);
+		//alert(JSON.stringify(json));
+		$('div').click(function(){
+			$.ajax({
+				"url":"bas/test.do",
+				"type":"POST",
+				"data":json,
+				"dataType":"json",
+				"contentType":"application/json",
+				"success":function(data)
+				{
+					console.log(1);
+				}
+			});
+		});
+		var a=1;
+		var b='bb';
+		var c='cc';
+		var d='dd';
+		var json={a:a,letter:{b:b,c:c,d:d}};
+		//console.log(json);
+		/*$('input').change(function(){
+			console.log($(this).val());
+		});*/
+		var oInp=document.querySelector('input');
+		oInp.onkeyup=function()
+		{
+			console.log($(this).val());
+		};
+	});
+	</script>
+</head>
+<body>
+	<div></div>
+	<input type="text">
+</body>
+</html>

@@ -30,7 +30,7 @@ li { list-style: none; }
 a { text-decoration: none; }
 a:active { background:none; }
 a img { display: block; border: none; }
-input{border-radius: 0;}
+input{border-radius: 0; color:#000;}
 input:focus { outline: 0 none transparent; }
 input::-ms-clear { display:none; }
 input, textarea { background:none; border:none; }
@@ -40,11 +40,11 @@ table { border-collapse: collapse; border-spacing: 0; }
 body {  overflow-x:hidden; 
 	    font-family: "Microsoft YaHei",Arial,Helvetica,sans-serif; 
 	    font-weight: normal; color:#767676; background:#f1f3f4;
-	    }
+	    padding:2.5rem 0;}
 /*装所有东西的大盒子*/
 
 html{font-size:30px;}
-.wrap { width:18rem; margin: 0 auto;  }
+.wrap { width:18rem; margin: 0 auto; position:relative;}
 .clearfix:after { display: block; height: 0; content: "."; clear: both; visibility: hidden; }
 .fl { float: left; }
 .fr { float: right; }
@@ -65,3 +65,7 @@ footer{width:18rem; height:1.5rem;background:#11a9ec;text-align: center;
  padding:0.5rem 0; position:fixed; bottom:0; left:0;}
 footer p{font-size:0.55rem; color:#fff; }
 
+.loading{width:16rem; height:2rem;display:none; position:fixed; left:50%;
+top:50%; margin-left:-8rem; margin-top:-3.5rem;}
+.loading i{width:2rem; height:2rem; background:url(../images/roller.gif) no-repeat;
+background-size:cover; margin:0 auto; display: block;}

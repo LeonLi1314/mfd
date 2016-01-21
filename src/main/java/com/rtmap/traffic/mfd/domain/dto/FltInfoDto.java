@@ -2,7 +2,7 @@ package com.rtmap.traffic.mfd.domain.dto;
 
 import java.util.Date;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rtmap.traffic.mfd.domain.ArrdepFlag;
 
 /**
@@ -25,6 +25,7 @@ public class FltInfoDto {
 	private String startAirportCn;
 	private String destAirportCn;
 	private String stateCn;
+	private String stateColor = "green";
 	private int contractId;
 
 	public String getFltId() {
@@ -67,7 +68,11 @@ public class FltInfoDto {
 		this.arrdep = arrdep;
 	}
 
-	@JSONField(format = "HH:mm")
+	/*
+	 * fastjson日期注解
+	 */
+	// @JSONField(format = "HH:mm")
+	@JsonFormat(pattern = "HH:mm")
 	public Date getStartSdt() {
 		return startSdt;
 	}
@@ -75,8 +80,11 @@ public class FltInfoDto {
 	public void setStartSdt(Date startSdt) {
 		this.startSdt = startSdt;
 	}
-
-	@JSONField(format = "HH:mm")
+	/*
+	 * fastjson日期注解
+	 */
+	// @JSONField(format = "HH:mm")
+	@JsonFormat(pattern = "HH:mm")
 	public Date getDestSdt() {
 		return destSdt;
 	}
@@ -107,6 +115,14 @@ public class FltInfoDto {
 
 	public void setStateCn(String stateCn) {
 		this.stateCn = stateCn;
+	}
+
+	public String getStateColor() {
+		return stateColor;
+	}
+
+	public void setStateColor(String stateColor) {
+		this.stateColor = stateColor;
 	}
 
 	public int getContractId() {

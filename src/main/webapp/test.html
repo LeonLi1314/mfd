@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script>
+		var country={};
+		country.countryCode = "cn";
+		country.nameAbbrCn = "中国";
+		country.nameCn = "中华人民共和国";
+		country.nameEn = "china";
+
+		$(function() {
+			console.log(country);
+			console.log(JSON.stringify(country));
+			$.ajax({
+				url : "bas/test.do",
+				// 必须转成字符串，否则会导致错误，因为js会默认将这个json对象放到表单数据中，故而导致controller接收不到。
+				type : "POST",
+				async : true,
+				//  这一条必须写，表明request的数据类型是json
+				contentType : "application/json; charset=utf-8",
+				data : JSON.stringify(country),
+				// 表示返回值的类型，不必须，且依据返回值类型而定。
+				datatype:"json",
+				success : function(rst) {
+					alert(JSON.stringify(rst));
+				}
+			});
+		})
+	</script>
+</body>
+</html>

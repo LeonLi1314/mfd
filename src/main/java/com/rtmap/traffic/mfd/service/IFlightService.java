@@ -1,10 +1,13 @@
 package com.rtmap.traffic.mfd.service;
 
+import java.util.List;
+
 import com.rtmap.traffic.mfd.domain.PageRst;
 import com.rtmap.traffic.mfd.domain.cond.ArrdepPlaceCond;
 import com.rtmap.traffic.mfd.domain.cond.FltIdCond;
 import com.rtmap.traffic.mfd.domain.cond.FltNoCond;
 import com.rtmap.traffic.mfd.domain.cond.PageCond;
+import com.rtmap.traffic.mfd.domain.cond.ShakeCond;
 import com.rtmap.traffic.mfd.domain.cond.SubscriberCond;
 import com.rtmap.traffic.mfd.domain.dto.FltDetailDto;
 import com.rtmap.traffic.mfd.domain.dto.FltInfoDto;
@@ -52,4 +55,18 @@ public interface IFlightService {
 	 * @return 航班列表
 	 */
 	PageRst<FltInfoDto> getFollowedFlights(SubscriberCond cond);
+
+	/**
+	 * 根据摇一摇查询条件获取有限的航班列表
+	 * @param cond 摇一摇查询条件
+	 * @return 航班列表
+	 */
+	List<FltInfoDto> getLimitFlightsByShakeCond(ShakeCond cond);
+	
+	/**
+	 * 根据摇一摇查询条件获取航班列表
+	 * @param cond 摇一摇查询条件
+	 * @return 航班列表
+	 */
+	List<FltInfoDto> getFlightsByShakeCond(ShakeCond cond);
 }

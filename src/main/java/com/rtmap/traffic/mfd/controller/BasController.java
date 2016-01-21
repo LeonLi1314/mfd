@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rtmap.traffic.mfd.domain.OpRst;
@@ -58,8 +58,8 @@ public class BasController extends UniformController {
 	 * @return 返回服务器当前时间
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/test.do", method = { RequestMethod.POST, RequestMethod.GET  }, produces = "application/json;charset=UTF-8")
-	public OpRst test(@RequestBody Country country) {
+	@RequestMapping(value = "/test.do")
+	public OpRst test(@RequestBody Country country,HttpServletRequest request) {
 		OpRst rst = new OpRst();
 		if (country != null) {
 			rst.setSuccess(true);
@@ -75,8 +75,10 @@ public class BasController extends UniformController {
 	 * @return 返回服务器当前时间
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/currentDateTime.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public Date getCurrentDateTime() {
+	@RequestMapping(value = "/currentDateTime.do")
+	public Date getCurrentDateTime(HttpServletRequest request) {
+		String currAirportCode = request.getParameter("currAirportCode");
+		String openId = request.getParameter("openId");
 		Date curr = DateUtils.parseDate("2016-01-10");
 		return curr;
 		// return new Date();
@@ -88,8 +90,10 @@ public class BasController extends UniformController {
 	 * @return 返回国家集合
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/countries.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public List<Country> getCountries() {
+	@RequestMapping(value = "/countries.do")
+	public List<Country> getCountries(HttpServletRequest request) {
+		String currAirportCode = request.getParameter("currAirportCode");
+		String openId = request.getParameter("openId");
 		return basService.getCountries();
 	}
 
@@ -99,8 +103,10 @@ public class BasController extends UniformController {
 	 * @return 城市集合
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/domCities.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public Map<String, List<StartingOrDestinationDto>> getDomesticGroupedCities() {
+	@RequestMapping(value = "/domCities.do")
+	public Map<String, List<StartingOrDestinationDto>> getDomesticGroupedCities(HttpServletRequest request) {
+		String currAirportCode = request.getParameter("currAirportCode");
+		String openId = request.getParameter("openId");
 		return basService.getDomesticGroupedCities(currAirportCode);
 	}
 
@@ -110,8 +116,10 @@ public class BasController extends UniformController {
 	 * @return 城市集合
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/intCities.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public Map<String, List<StartingOrDestinationDto>> getInternationalGroupedCities() {
+	@RequestMapping(value = "/intCities.do")
+	public Map<String, List<StartingOrDestinationDto>> getInternationalGroupedCities(HttpServletRequest request) {
+		String currAirportCode = request.getParameter("currAirportCode");
+		String openId = request.getParameter("openId");
 		return basService.getInternationalGroupedCities(currAirportCode);
 	}
 
@@ -121,8 +129,10 @@ public class BasController extends UniformController {
 	 * @return 航空公司集合
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/domAirlines.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public Map<String, List<Airline>> getDomesticGroupedAirlines() {
+	@RequestMapping(value = "/domAirlines.do")
+	public Map<String, List<Airline>> getDomesticGroupedAirlines(HttpServletRequest request) {
+		String currAirportCode = request.getParameter("currAirportCode");
+		String openId = request.getParameter("openId");
 		return basService.getDomesticGroupedAirlines(currAirportCode);
 	}
 
@@ -132,8 +142,10 @@ public class BasController extends UniformController {
 	 * @return 航空公司集合
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/intAirlines.do", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	public Map<String, List<Airline>> getInternationalGroupedAirlines() {
+	@RequestMapping(value = "/intAirlines.do")
+	public Map<String, List<Airline>> getInternationalGroupedAirlines(HttpServletRequest request) {
+		String currAirportCode = request.getParameter("currAirportCode");
+		String openId = request.getParameter("openId");
 		return basService.getInternationalGroupedAirlines(currAirportCode);
 	}
 }

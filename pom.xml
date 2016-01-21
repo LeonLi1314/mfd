@@ -35,7 +35,7 @@
 
 		<!-- hibernate -->
 		<!-- <hibernate.version>4.3.11.Final</hibernate.version> -->
-		<hibernate.version>5.0.6.Final</hibernate.version>
+		<hibernate.version>4.3.2.Final</hibernate.version>
 		<hibernate-validator.version>5.2.2.Final</hibernate-validator.version>
 		<jta.version>1.1</jta.version>
 
@@ -45,6 +45,7 @@
 		<spring.version>4.1.7.RELEASE</spring.version>
 		<!-- json解析插件 -->
 		<fastjson.version>1.2.7</fastjson.version>
+		<jackson.version>2.6.0</jackson.version>
 	</properties>
 
 	<dependencies>
@@ -152,6 +153,22 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>${fastjson.version}</version>
+		</dependency>
+		<!-- jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<!-- AspectJ -->
