@@ -1,6 +1,7 @@
 package com.rtmap.traffic.mfd.domain.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.rtmap.traffic.mfd.common.XmlDateAdapter;
 
 /**
  * 首都机场离港航班动态信息
@@ -17,249 +27,353 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "flt_depf_pek")
+@XmlRootElement(name = "FLST")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DepfPek {
 	@Id
 	@Column(name = "depf_id", updatable = false)
+	@XmlElement(name = "FLID")
 	private String depfId;
 	@Column(name = "flt_no")
+	@XmlElement(name = "FLNO")
 	private String fltNo;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "SCHT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date sdt;
 	@Column(name = "domint", columnDefinition = "CHAR", length = 1)
+	@XmlElement(name = "DORI")
 	private String domint;
 	@Column(name = "master_flt_no")
+	@XmlElement(name = "CSFT")
 	private String masterFltNo;
 	@Column(name = "flt_type", columnDefinition = "CHAR", length = 1)
+	@XmlElement(name = "FLIT")
 	private String fltType;
 	@Column(name = "iata", columnDefinition = "CHAR", length = 2)
+	@XmlElement(name = "ALCD")
 	private String iata;
 	@Column(name = "icao", columnDefinition = "CHAR", length = 3)
+	@XmlElement(name = "ICAO")
 	private String icao;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "LAST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date lastTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "est_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "ESTT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date estTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "final_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "FIND")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date finalTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "act_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "ACTT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date actTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "begin_board_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "BOAT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date beginBoardTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "last_board_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "LATT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date lastBoardTime;
 	@Column(name = "task_nature", columnDefinition = "CHAR", length = 1)
+	@XmlElement(name = "TASC")
 	private String taskNature;
 	@Column(name = "regist_no")
+	@XmlElement(name = "REGN")
 	private String registNo;
+	@XmlElement(name = "ACTC")
 	@Column(name = "air_type")
 	private String airType;
+	@XmlElement(name = "TERC")
 	@Column(name = "term")
 	private String term;
 	@Column(name = "park")
+	@XmlElement(name = "BAYC")
 	private String park;
-	@Column(name = "cnt_disp")
-	private String cntDisp;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "first_cnt_ot", columnDefinition = "DATETIME")
-	private Date firstCntOt;
-	@Column(name = "gat_disp")
-	private String gatDisp;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "first_gat_ot", columnDefinition = "DATETIME")
-	private Date firstGatOt;
 	@Column(name = "route")
+	@XmlElement(name = "EROU")
 	private String route;
 	@Column(name = "dest_airport_code")
+	@XmlElement(name = "SAIR")
 	private String destAirportCode;
 	@Column(name = "dest_airport_cn")
+	@XmlElement(name = "STAC")
 	private String destAirportCn;
 	@Column(name = "dest_airport_en")
+	@XmlElement(name = "STAE")
 	private String destAirportEn;
 	@Column(name = "dest_sdt")
+	@XmlElement(name = "ENST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date destSdt;
 	@Column(name = "flt_state_code")
+	@XmlElement(name = "FLST")
 	private String fltStateCode;
 	@Column(name = "flt_state_en")
+	@XmlElement(name = "FLSE")
 	private String fltStateEn;
-	@Column(name = "flt_state_en_abbr")
-	private String fltStateEnAbbr;
-	@Column(name = "flt_state_en_spec")
-	private String fltStateEnSpec;
 	@Column(name = "flt_state_cn")
+	@XmlElement(name = "FLSC")
 	private String fltStateCn;
-	@Column(name = "flt_state_cn_abbr")
-	private String fltStateCnAbbr;
-	@Column(name = "flt_state_cn_spec")
-	private String fltStateCnSpec;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cancel_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "CANT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date cancelTime;
 	@Column(name = "delay_reason_code")
+	@XmlElement(name = "DELC")
 	private String delayReasonCode;
 	@Column(name = "delay_reason_en")
+	@XmlElement(name = "DERE")
 	private String delayReasonEn;
 	@Column(name = "delay_reason_cn")
+	@XmlElement(name = "DERC")
 	private String delayReasonCn;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "delay_begin_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "DEST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date delayBeginTime;
 	@Column(name = "delay_dur", columnDefinition = "INT")
+	@XmlElement(name = "DELD")
 	private Integer delayDur;
 	@Column(name = "ret_status")
+	@XmlElement(name = "RETT")
 	private String retStatus;
 	@Column(name = "ret_reason")
+	@XmlElement(name = "RETD")
 	private String retReason;
 	@Column(name = "div_airport_code")
+	@XmlElement(name = "DIVA")
 	private String divAirportCode;
 	@Column(name = "div_airport_en")
+	@XmlElement(name = "DIAE")
 	private String divAirportEn;
 	@Column(name = "div_airport_cn")
+	@XmlElement(name = "DIAC")
 	private String divAirportCn;
 	@Column(name = "div_status")
+	@XmlElement(name = "DIVS")
 	private String divStatus;
 	@Column(name = "div_dir")
+	@XmlElement(name = "DIVD")
 	private String divDir;
 	@Column(name = "sflight1")
+	@XmlElement(name = "SFN1")
 	private String sflight1;
 	@Column(name = "sflight2")
+	@XmlElement(name = "SFN2")
 	private String sflight2;
 	@Column(name = "sflight3")
+	@XmlElement(name = "SFN3")
 	private String sflight3;
 	@Column(name = "sflight4")
+	@XmlElement(name = "SFN4")
 	private String sflight4;
 	@Column(name = "sflight5")
+	@XmlElement(name = "SFN5")
 	private String sflight5;
 	@Column(name = "sflight6")
+	@XmlElement(name = "SFN6")
 	private String sflight6;
 	@Column(name = "sflight7")
+	@XmlElement(name = "SFN7")
 	private String sflight7;
 	@Column(name = "sflight8")
+	@XmlElement(name = "SFN8")
 	private String sflight8;
 	@Column(name = "sflight9")
+	@XmlElement(name = "SFN9")
 	private String sflight9;
 	@Column(name = "sflight10")
+	@XmlElement(name = "SFNA")
 	private String sflight10;
 	@Column(name = "sflight1_iata")
+	@XmlElement(name = "SF1I")
 	private String sflight1Iata;
 	@Column(name = "sflight2_iata")
+	@XmlElement(name = "SF2I")
 	private String sflight2Iata;
 	@Column(name = "sflight3_iata")
+	@XmlElement(name = "SF3I")
 	private String sflight3Iata;
 	@Column(name = "sflight4_iata")
+	@XmlElement(name = "SF4I")
 	private String sflight4Iata;
 	@Column(name = "sflight5_iata")
+	@XmlElement(name = "SF5I")
 	private String sflight5Iata;
 	@Column(name = "sflight6_iata")
+	@XmlElement(name = "SF6I")
 	private String sflight6Iata;
 	@Column(name = "sflight7_iata")
+	@XmlElement(name = "SF7I")
 	private String sflight7Iata;
 	@Column(name = "sflight8_iata")
+	@XmlElement(name = "SF8I")
 	private String sflight8Iata;
 	@Column(name = "sflight9_iata")
+	@XmlElement(name = "SF9I")
 	private String sflight9Iata;
 	@Column(name = "sflight10_iata")
+	@XmlElement(name = "SFAI")
 	private String sflight10Iata;
 	@Column(name = "route1")
+	@XmlElement(name = "ROU1")
 	private String route1;
 	@Column(name = "route2")
+	@XmlElement(name = "ROU2")
 	private String route2;
 	@Column(name = "route3")
+	@XmlElement(name = "ROU3")
 	private String route3;
 	@Column(name = "route4")
+	@XmlElement(name = "ROU4")
 	private String route4;
 	@Column(name = "route5")
+	@XmlElement(name = "ROU5")
 	private String route5;
 	@Column(name = "route6")
+	@XmlElement(name = "ROU6")
 	private String route6;
 	@Column(name = "route1_cn")
+	@XmlElement(name = "RO1C")
 	private String route1Cn;
 	@Column(name = "route2_cn")
+	@XmlElement(name = "RO2C")
 	private String route2Cn;
 	@Column(name = "route3_cn")
+	@XmlElement(name = "RO3C")
 	private String route3Cn;
 	@Column(name = "route4_cn")
+	@XmlElement(name = "RO4C")
 	private String route4Cn;
 	@Column(name = "route5_cn")
+	@XmlElement(name = "RO5C")
 	private String route5Cn;
 	@Column(name = "route6_cn")
+	@XmlElement(name = "RO6C")
 	private String route6Cn;
 	@Column(name = "route1_en")
+	@XmlElement(name = "RO1E")
 	private String route1En;
 	@Column(name = "route2_en")
+	@XmlElement(name = "RO2E")
 	private String route2En;
 	@Column(name = "route3_en")
+	@XmlElement(name = "RO3E")
 	private String route3En;
 	@Column(name = "route4_en")
+	@XmlElement(name = "RO4E")
 	private String route4En;
 	@Column(name = "route5_en")
+	@XmlElement(name = "RO5E")
 	private String route5En;
 	@Column(name = "route6_en")
+	@XmlElement(name = "RO6E")
 	private String route6En;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route1_sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "RO1S")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date route1Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route2_sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "RO2S")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date route2Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route3_sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "RO3S")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date route3Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route4_sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "RO4S")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date route4Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route5_sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "RO5S")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date route5Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route6_sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "RO6S")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date route6Sdt;
 	@Column(name = "route1_flt_dur", columnDefinition = "INT")
+	@XmlElement(name = "R1FD")
 	private Integer route1FltDur;
 	@Column(name = "route2_flt_dur", columnDefinition = "INT")
+	@XmlElement(name = "R2FD")
 	private Integer route2FltDur;
 	@Column(name = "route3_flt_dur", columnDefinition = "INT")
+	@XmlElement(name = "R3FD")
 	private Integer route3FltDur;
 	@Column(name = "route4_flt_dur", columnDefinition = "INT")
+	@XmlElement(name = "R4FD")
 	private Integer route4FltDur;
 	@Column(name = "route5_flt_dur", columnDefinition = "INT")
+	@XmlElement(name = "R5FD")
 	private Integer route5FltDur;
 	@Column(name = "route6_flt_dur", columnDefinition = "INT")
+	@XmlElement(name = "R6FD")
 	private Integer route6FltDur;
 	@Column(name = "route1_stay_dur", columnDefinition = "INT")
+	@XmlElement(name = "R1SD")
 	private Integer route1StayDur;
 	@Column(name = "route2_stay_dur", columnDefinition = "INT")
+	@XmlElement(name = "R2SD")
 	private Integer route2StayDur;
 	@Column(name = "route3_stay_dur", columnDefinition = "INT")
+	@XmlElement(name = "R3SD")
 	private Integer route3StayDur;
 	@Column(name = "route4_stay_dur", columnDefinition = "INT")
+	@XmlElement(name = "R4SD")
 	private Integer route4StayDur;
 	@Column(name = "route5_stay_dur", columnDefinition = "INT")
+	@XmlElement(name = "R5SD")
 	private Integer route5StayDur;
 	@Column(name = "route6_stay_dur", columnDefinition = "INT")
+	@XmlElement(name = "R6SD")
 	private Integer route6StayDur;
 	@Column(name = "pre_flt_no")
+	@XmlElement(name = "PRFN")
 	private String preFltNo;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "pre_sdt", columnDefinition = "DATETIME")
+	@XmlElement(name = "PRST")
 	private Date preSdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "pre_est_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "PRET")
 	private Date preEstTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "pre_act_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "PRAT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date preActTime;
 	@Column(name = "pre_flt_state_code")
+	@XmlElement(name = "PFST")
 	private String preFltStateCode;
 	@Column(name = "pre_flt_state_en")
+	@XmlElement(name = "PFSE")
 	private String preFltStateEn;
 	@Column(name = "pre_flt_state_cn")
+	@XmlElement(name = "PFSC")
 	private String preFltStateCn;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "create_time", columnDefinition = "TIMESTAMP", insertable = false, updatable = false)
@@ -268,6 +382,7 @@ public class DepfPek {
 	@Column(name = "update_time", columnDefinition = "TIMESTAMP", insertable = false)
 	private Date updateTime;
 	@Column(name = "rmk")
+	@XmlElement(name = "FLRE")
 	private String rmk;
 
 	public String getDepfId() {
@@ -422,38 +537,6 @@ public class DepfPek {
 		this.park = park == null ? null : park.trim();
 	}
 
-	public String getCntDisp() {
-		return cntDisp;
-	}
-
-	public void setCntDisp(String cntDisp) {
-		this.cntDisp = cntDisp == null ? null : cntDisp.trim();
-	}
-
-	public Date getFirstCntOt() {
-		return firstCntOt;
-	}
-
-	public void setFirstCntOt(Date firstCntOt) {
-		this.firstCntOt = firstCntOt;
-	}
-
-	public String getGatDisp() {
-		return gatDisp;
-	}
-
-	public void setGatDisp(String gatDisp) {
-		this.gatDisp = gatDisp == null ? null : gatDisp.trim();
-	}
-
-	public Date getFirstGatOt() {
-		return firstGatOt;
-	}
-
-	public void setFirstGatOt(Date firstGatOt) {
-		this.firstGatOt = firstGatOt;
-	}
-
 	public String getRoute() {
 		return route;
 	}
@@ -510,44 +593,12 @@ public class DepfPek {
 		this.fltStateEn = fltStateEn == null ? null : fltStateEn.trim();
 	}
 
-	public String getFltStateEnAbbr() {
-		return fltStateEnAbbr;
-	}
-
-	public void setFltStateEnAbbr(String fltStateEnAbbr) {
-		this.fltStateEnAbbr = fltStateEnAbbr;
-	}
-
-	public String getFltStateEnSpec() {
-		return fltStateEnSpec;
-	}
-
-	public void setFltStateEnSpec(String fltStateEnSpec) {
-		this.fltStateEnSpec = fltStateEnSpec;
-	}
-
 	public String getFltStateCn() {
 		return fltStateCn;
 	}
 
 	public void setFltStateCn(String fltStateCn) {
 		this.fltStateCn = fltStateCn == null ? null : fltStateCn.trim();
-	}
-
-	public String getFltStateCnAbbr() {
-		return fltStateCnAbbr;
-	}
-
-	public void setFltStateCnAbbr(String fltStateCnAbbr) {
-		this.fltStateCnAbbr = fltStateCnAbbr;
-	}
-
-	public String getFltStateCnSpec() {
-		return fltStateCnSpec;
-	}
-
-	public void setFltStateCnSpec(String fltStateCnSpec) {
-		this.fltStateCnSpec = fltStateCnSpec;
 	}
 
 	public Date getCancelTime() {
@@ -1180,5 +1231,117 @@ public class DepfPek {
 
 	public void setRmk(String rmk) {
 		this.rmk = rmk == null ? null : rmk.trim();
+	}
+
+	/*
+	 * 自定义属性
+	 */
+	@Column(name = "flt_state_cn_abbr")
+	private String fltStateCnAbbr;
+	@Column(name = "flt_state_cn_spec")
+	private String fltStateCnSpec;
+	@Column(name = "flt_state_en_abbr")
+	private String fltStateEnAbbr;
+	@Column(name = "flt_state_en_spec")
+	private String fltStateEnSpec;
+	@Column(name = "cnt_disp")
+	private String cntDisp;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "first_cnt_ot", columnDefinition = "DATETIME")
+	private Date firstCntOt;
+	@Column(name = "gat_disp")
+	private String gatDisp;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "first_gat_ot", columnDefinition = "DATETIME")
+	private Date firstGatOt;
+
+	public String getFltStateCnAbbr() {
+		return fltStateCnAbbr;
+	}
+
+	public void setFltStateCnAbbr(String fltStateCnAbbr) {
+		this.fltStateCnAbbr = fltStateCnAbbr;
+	}
+
+	public String getFltStateCnSpec() {
+		return fltStateCnSpec;
+	}
+
+	public void setFltStateCnSpec(String fltStateCnSpec) {
+		this.fltStateCnSpec = fltStateCnSpec;
+	}
+
+	public String getFltStateEnAbbr() {
+		return fltStateEnAbbr;
+	}
+
+	public void setFltStateEnAbbr(String fltStateEnAbbr) {
+		this.fltStateEnAbbr = fltStateEnAbbr;
+	}
+
+	public String getFltStateEnSpec() {
+		return fltStateEnSpec;
+	}
+
+	public void setFltStateEnSpec(String fltStateEnSpec) {
+		this.fltStateEnSpec = fltStateEnSpec;
+	}
+
+	public String getCntDisp() {
+		return cntDisp;
+	}
+
+	public void setCntDisp(String cntDisp) {
+		this.cntDisp = cntDisp == null ? null : cntDisp.trim();
+	}
+
+	public Date getFirstCntOt() {
+		return firstCntOt;
+	}
+
+	public void setFirstCntOt(Date firstCntOt) {
+		this.firstCntOt = firstCntOt;
+	}
+
+	public String getGatDisp() {
+		return gatDisp;
+	}
+
+	public void setGatDisp(String gatDisp) {
+		this.gatDisp = gatDisp == null ? null : gatDisp.trim();
+	}
+
+	public Date getFirstGatOt() {
+		return firstGatOt;
+	}
+
+	public void setFirstGatOt(Date firstGatOt) {
+		this.firstGatOt = firstGatOt;
+	}
+
+	/*
+	 * 扩展属性
+	 */
+	@Transient
+	@XmlElements(@XmlElement(name = "OFLC"))
+	private List<DepfCounterPek> counters;
+	@Transient
+	@XmlElements(@XmlElement(name = "OPFG"))
+	private List<DepfGatePek> gates;
+
+	public List<DepfCounterPek> getCounters() {
+		return counters;
+	}
+
+	public void setCounters(List<DepfCounterPek> counters) {
+		this.counters = counters;
+	}
+
+	public List<DepfGatePek> getGates() {
+		return gates;
+	}
+
+	public void setGates(List<DepfGatePek> gates) {
+		this.gates = gates;
 	}
 }

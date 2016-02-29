@@ -20,6 +20,20 @@
 	<bean id="pageCond" class="com.rtmap.traffic.mfd.domain.cond.PageCond">
 		<property name="pageSize" value="10" />
 	</bean>
+
+	<bean id="flightPekSynchronize" class="com.rtmap.traffic.mfd.service.impl.FlightPekSynchronize"
+		init-method="afterPropertiesSet">
+		<property name="httpClient">
+			<ref bean="pekHttpClient" />
+		</property>
+	</bean>
+
+	<bean id="pekHttpClient" class="rtmap.frame.util.HttpClientUtils">
+		<property name="scheme" value="http" />
+		<property name="host" value="localhost" />
+		<property name="actionPath" value="/mfd/bas/currentDateTime.do" />
+		<property name="port" value="8080" />
+	</bean>
 </beans>
 
 

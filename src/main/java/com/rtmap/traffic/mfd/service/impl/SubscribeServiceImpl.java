@@ -16,7 +16,7 @@ import com.rtmap.traffic.mfd.domain.dto.FollowFltDto;
 import com.rtmap.traffic.mfd.domain.entity.SubscribeContract;
 import com.rtmap.traffic.mfd.service.ISubscribeService;
 
-import lqs.frame.util.DateUtils;
+import rtmap.frame.util.DateUtils;
 
 /**
  * 订阅关注模块服务层

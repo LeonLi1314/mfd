@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-import lqs.frame.util.DatePatterns;
+import rtmap.frame.util.DatePatterns;
 
 /**
  * 隐藏的请求参数

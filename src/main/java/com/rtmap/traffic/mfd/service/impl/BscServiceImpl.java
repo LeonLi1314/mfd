@@ -25,7 +25,7 @@ import com.rtmap.traffic.mfd.domain.entity.HotAirline;
 import com.rtmap.traffic.mfd.domain.entity.HotCity;
 import com.rtmap.traffic.mfd.service.IBasService;
 
-import lqs.frame.util.StringUtils;
+import rtmap.frame.util.StringUtils;
 
 /**
  * 基础数据服务层实现

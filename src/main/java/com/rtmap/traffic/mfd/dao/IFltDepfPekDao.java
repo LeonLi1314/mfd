@@ -2,6 +2,7 @@ package com.rtmap.traffic.mfd.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.rtmap.traffic.mfd.domain.cond.FltNoCond;
 import com.rtmap.traffic.mfd.domain.entity.DepfPek;
@@ -13,6 +14,10 @@ import com.rtmap.traffic.mfd.domain.entity.DepfPek;
  *
  */
 public interface IFltDepfPekDao {
+	int insert(DepfPek depfPek);
+
+	int update(String depfId, Map<String, Object> updateParas);
+	
 	/**
 	 * 按航班Id主键查找
 	 * 
@@ -60,23 +65,6 @@ public interface IFltDepfPekDao {
 	 *            页码
 	 * @param pageSize
 	 *            每页条数
-	 * @param airportCode
-	 *            机场航站编码
-	 * @param airlineCode
-	 *            航空公司编码
-	 * @param queryDate
-	 *            查询日期
-	 * @return 航班信息列表
-	 */
-	List<DepfPek> selectByPlaceCond(int pageNo, int pageSize, String airportCode, String airlineCode, Date queryDate);
-
-	/**
-	 * 根据起降地条件查询航班信息列表
-	 * 
-	 * @param pageNo
-	 *            页码
-	 * @param pageSize
-	 *            每页条数
 	 * @param airportCodes
 	 *            机场航站编码集合
 	 * @param airlineCode
@@ -100,4 +88,15 @@ public interface IFltDepfPekDao {
 	 * @return 总记录数
 	 */
 	int selectTotalCountByPlaceCond(List<String> airportCodes, String airlineCode, Date queryDate);
+
+	/**
+	 * 根据登机口查询航班
+	 * 
+	 * @param gateNos
+	 *            登机口集合
+	 * @param limit
+	 *            条数限制
+	 * @return 航班信息列表
+	 */
+	List<DepfPek> selectByGateNos(List<String> gateNos, int limit);
 }

@@ -8,6 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.rtmap.traffic.mfd.common.XmlDateAdapter;
 
 /**
  * 首都机场航班登机口资源
@@ -17,11 +23,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "flt_depf_gate_pek")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DepfGatePek {
 	@Id
 	@Column(name = "gat_id", updatable = false)
     private String gatId;
     @Column(name = "depf_id")
+	@XmlElement(name = "FLID")
     private String depfId;
     @Column(name = "flt_no")
     private String fltNo;
@@ -29,26 +37,39 @@ public class DepfGatePek {
    	@Column(name = "sdt", columnDefinition = "DATETIME")
     private Date sdt;
     @Column(name = "gat_code")
+	@XmlElement(name = "FLID")
     private String gatCode;
     @Column(name = "gat_domint", columnDefinition = "CHAR", length = 1)
+	@XmlElement(name = "DORI")
     private String gatDomint;
     @Column(name = "gat_cls_code")
+	@XmlElement(name = "GATC")
     private String gatClsCode;
     @Column(name = "gat_cls_cn")
+	@XmlElement(name = "GCLC")
     private String gatClsCn;
     @Column(name = "gat_cls_en")
+	@XmlElement(name = "GCLE")
     private String gatClsEn;
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_pot", columnDefinition = "DATETIME")
+	@XmlElement(name = "SCST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date gatPot;
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_pct", columnDefinition = "DATETIME")
+	@XmlElement(name = "SCET")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date gatPct;
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_ot", columnDefinition = "DATETIME")
+	@XmlElement(name = "ACST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date gatOt;
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_ct", columnDefinition = "DATETIME")
+	@XmlElement(name = "ACET")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date gatCt;
 
     public String getGatId() {

@@ -2,6 +2,7 @@ package com.rtmap.traffic.mfd.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.rtmap.traffic.mfd.domain.cond.FltNoCond;
 import com.rtmap.traffic.mfd.domain.entity.ArrfPek;
@@ -13,6 +14,10 @@ import com.rtmap.traffic.mfd.domain.entity.ArrfPek;
  *
  */
 public interface IFltArrfPekDao {
+	int insert(ArrfPek arrfPek);
+
+	int update(String arrfId, Map<String, Object> updateParas);
+
 	/**
 	 * 按航班Id主键查找
 	 * 
@@ -52,23 +57,6 @@ public interface IFltArrfPekDao {
 	 * @return 总记录数
 	 */
 	int selectTotalCountByFltNoCond(FltNoCond cond);
-
-	/**
-	 * 根据起降地条件查询航班信息列表
-	 * 
-	 * @param pageNo
-	 *            页码
-	 * @param pageSize
-	 *            每页条数
-	 * @param airportCode
-	 *            机场航站编码
-	 * @param airlineCode
-	 *            航空公司编码
-	 * @param queryDate
-	 *            查询日期
-	 * @return 航班信息列表
-	 */
-	List<ArrfPek> selectByPlaceCond(int pageNo, int pageSize, String airportCode, String airlineCode, Date queryDate);
 
 	/**
 	 * 根据起降地条件查询航班信息列表

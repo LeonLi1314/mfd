@@ -1,16 +1,24 @@
 package com.rtmap.traffic.mfd.service.impl;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.dom4j.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.rtmap.traffic.mfd.dao.IFltArrfPekDao;
+import com.rtmap.traffic.mfd.dao.IFltChangeinfoPekDao;
 import com.rtmap.traffic.mfd.dao.IFltDepfPekDao;
 import com.rtmap.traffic.mfd.domain.ArrdepFlag;
 import com.rtmap.traffic.mfd.domain.FltTypeConst;
@@ -24,15 +32,21 @@ import com.rtmap.traffic.mfd.domain.cond.SubscriberCond;
 import com.rtmap.traffic.mfd.domain.dto.FltDetailDto;
 import com.rtmap.traffic.mfd.domain.dto.FltInfoDto;
 import com.rtmap.traffic.mfd.domain.entity.Airport;
+import com.rtmap.traffic.mfd.domain.entity.ArrfBeltPek;
 import com.rtmap.traffic.mfd.domain.entity.ArrfPek;
+import com.rtmap.traffic.mfd.domain.entity.DepfCounterPek;
+import com.rtmap.traffic.mfd.domain.entity.DepfGatePek;
 import com.rtmap.traffic.mfd.domain.entity.DepfPek;
+import com.rtmap.traffic.mfd.domain.entity.FltChangeinfoPek;
 import com.rtmap.traffic.mfd.domain.entity.SubscribeContract;
 import com.rtmap.traffic.mfd.service.IBasService;
 import com.rtmap.traffic.mfd.service.IFlightService;
 import com.rtmap.traffic.mfd.service.ISubscribeService;
 
-import lqs.frame.util.DateUtils;
-import lqs.frame.util.StringUtils;
+import rtmap.frame.util.DatePatterns;
+import rtmap.frame.util.DateUtils;
+import rtmap.frame.util.JaxbUtils;
+import rtmap.frame.util.StringUtils;
 
 /**
  * 航班动态服务层实现
@@ -42,6 +56,10 @@ import lqs.frame.util.StringUtils;
  */
 @Service("pekService")
 public class FlightPekServiceImpl implements IFlightService {
+	/**
+	 * 日志记录器
+	 */
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Resource
 	private IFltArrfPekDao fltArrfPekDao;
 	@Resource
@@ -50,7 +68,32 @@ public class FlightPekServiceImpl implements IFlightService {
 	private IBasService basService;
 	@Resource
 	private ISubscribeService subscribeService;
+	@Resource
+	private IFltChangeinfoPekDao fltChangeinfoPekDao;
 	private String currentAirportCn = "北京";
+	private List<String> arrfIgnoredFields;
+	private List<String> depfIgnoredFields;
+
+	{
+		arrfIgnoredFields = new ArrayList<>();
+		arrfIgnoredFields.add("belts");
+		arrfIgnoredFields.add("createTime");
+		arrfIgnoredFields.add("updateTime");
+
+		depfIgnoredFields = new ArrayList<>();
+		depfIgnoredFields.add("gates");
+		depfIgnoredFields.add("counters");
+		depfIgnoredFields.add("createTime");
+		depfIgnoredFields.add("updateTime");
+	}
+
+	@Override
+	public String test() {
+		fltArrfPekDao.selectByArrfId("test");
+		System.out.println("测试成功！");
+
+		return "测试成功！";
+	}
 
 	@Override
 	public PageRst<FltInfoDto> getFlightsByFltNoCond(PageCond<FltNoCond> pageCond) {
@@ -269,9 +312,9 @@ public class FlightPekServiceImpl implements IFlightService {
 		fltInfo.setArrdep(ArrdepFlag.A);
 		fltInfo.setIata(arrf.getFltNo().substring(0, 2));
 		fltInfo.setAirlineNameCn(basService.getAirlineNameCnByCode(fltInfo.getIata()));
-		fltInfo.setStartSdt(arrf.getStartSdt());
-		fltInfo.setStartAirportCn(arrf.getStartAirportCn());
-		fltInfo.setDestSdt(arrf.getSdt());
+		fltInfo.setStartSdt(DateUtils.formatDate(arrf.getStartSdt(), "HH:mm"));
+		fltInfo.setStartAirportCn(arrf.getStartAirportCn() == null ? "未到达" : arrf.getStartAirportCn());
+		fltInfo.setDestSdt(DateUtils.formatDate(arrf.getSdt(), "HH:mm"));
 		fltInfo.setDestAirportCn(currentAirportCn);
 		fltInfo.setStateCn(arrf.getFltStateCnAbbr());
 	}
@@ -293,11 +336,11 @@ public class FlightPekServiceImpl implements IFlightService {
 		fltInfo.setArrdep(ArrdepFlag.D);
 		fltInfo.setIata(depf.getFltNo().substring(0, 2));
 		fltInfo.setAirlineNameCn(basService.getAirlineNameCnByCode(fltInfo.getIata()));
-		fltInfo.setStartSdt(depf.getSdt());
+		fltInfo.setStartSdt(DateUtils.formatDate(depf.getSdt(), "HH:mm"));
 		fltInfo.setStartAirportCn(currentAirportCn);
-		fltInfo.setDestSdt(depf.getSdt());
+		fltInfo.setDestSdt(DateUtils.formatDate(depf.getDestSdt(), "HH:mm"));
 		fltInfo.setDestAirportCn(depf.getDestAirportCn());
-		fltInfo.setStateCn(depf.getFltStateCnAbbr());
+		fltInfo.setStateCn(depf.getFltStateCnAbbr() == null ? "未开放值机" : depf.getFltStateCnAbbr());
 	}
 
 	/**
@@ -533,6 +576,8 @@ public class FlightPekServiceImpl implements IFlightService {
 			stateCnAbbr = "未到达";
 			break;
 		}
+
+		arrfPek.setFltStateCnAbbr(stateCnAbbr);
 	}
 
 	/**
@@ -573,17 +618,417 @@ public class FlightPekServiceImpl implements IFlightService {
 			}
 			break;
 		}
+
+		depfPek.setFltStateCnAbbr(stateCnAbbr);
 	}
 
 	@Override
 	public List<FltInfoDto> getLimitFlightsByShakeCond(ShakeCond cond) {
-		// TODO Auto-generated method stub
-		return null;
+		return getFlightsByShakeCond(cond, 2);
 	}
 
 	@Override
 	public List<FltInfoDto> getFlightsByShakeCond(ShakeCond cond) {
-		// TODO Auto-generated method stub
-		return null;
+		return getFlightsByShakeCond(cond, -1);
+	}
+
+	private List<FltInfoDto> getFlightsByShakeCond(ShakeCond cond, int limit) {
+		List<String> gateNos = new ArrayList<>();
+		if (cond.getBeaconId().equals("1")) {
+			gateNos.add("C30");
+		} else {
+			gateNos.add("C51");
+			gateNos.add("C52");
+		}
+
+		List<DepfPek> depfs = fltDepfPekDao.selectByGateNos(gateNos, limit);
+		if (depfs == null || depfs.size() == 0)
+			return null;
+
+		List<FltInfoDto> rst = new ArrayList<>();
+		for (DepfPek depf : depfs) {
+			FltInfoDto fltInfo = new FltInfoDto();
+			assignByDepfPek(depf, fltInfo);
+
+			rst.add(fltInfo);
+		}
+
+		return rst;
+	}
+
+	/**
+	 * 获取属性值不同的集合
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getPropertyDifferences(Object origin, Object current, List<String> ignoredFields) {
+		if (origin == null || current == null)
+			return null;
+
+		Class<Object> oClass = (Class<Object>) origin.getClass();
+		Class<Object> cClass = (Class<Object>) current.getClass();
+
+		Field[] fields = cClass.getDeclaredFields();
+
+		if (fields == null)
+			return null;
+
+		Map<String, Object> rst = new HashMap<>();
+
+		for (Field field : fields) {
+			if (ignoredFields != null && ignoredFields.contains(field.getName())) {
+				continue;
+			}
+
+			// 如果字段是boolean类型，自动生成的get方法不加get前缀？？
+			String methodName = "get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1);
+
+			try {
+				Method om = (Method) oClass.getMethod(methodName);
+				Method cm = (Method) cClass.getMethod(methodName);
+
+				Object oVal = om.invoke(origin);
+				Object cVal = cm.invoke(current);
+
+				if (cVal == null) {
+					if (oVal != null) {
+						rst.put(field.getName(), null);
+					}
+				} else if (!cVal.equals(oVal)) {
+					if (cVal.getClass() == String.class) {
+						rst.put(field.getName(), String.valueOf(cVal));
+					} else if (cVal.getClass() == Date.class) {
+						Date d = (Date) cVal;
+						rst.put(field.getName(), DateUtils.formatDate(d));
+					} else if (cVal.getClass() == Integer.class) {
+						Integer d = (Integer) cVal;
+						rst.put(field.getName(), Integer.valueOf(d));
+					} else {
+						rst.put(field.getName(), String.valueOf(cVal));
+					}
+				}
+			} catch (NoSuchMethodException e) {
+			} catch (SecurityException e) {
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return rst;
+	}
+
+	@Override
+	@SuppressWarnings("rawtypes")
+	public void execute(Element data) {
+		// List arrfs = data.elements("INBO");
+		//
+		// if (arrfs != null && arrfs.size() > 0) {
+		// Iterator arrfIterator = arrfs.iterator();
+		// JaxbUtils inboJaxb = new JaxbUtils(ArrfPek.class);
+		//
+		// while (arrfIterator.hasNext()) {
+		// Element e = (Element) arrfIterator.next();
+		// ArrfPek arrf = inboJaxb.<ArrfPek> fromXml(e.asXML());
+		//
+		//
+		// }
+		// }
+		//
+		// List depfs = data.elements("FLST");
+		//
+		// if (depfs != null && depfs.size() > 0) {
+		// Iterator depfInterator = depfs.iterator();
+		// JaxbUtils depfJaxb = new JaxbUtils(DepfPek.class);
+		//
+		// while (depfInterator.hasNext()) {
+		// Element e = (Element) depfInterator.next();
+		// DepfPek depf = depfJaxb.<DepfPek> fromXml(e.asXML());
+		//
+		//
+		// }
+		// }
+
+		JaxbUtils arrfJaxb = new JaxbUtils(ArrfPek.class);
+		JaxbUtils depfJaxb = new JaxbUtils(DepfPek.class);
+		Iterator iterator = data.elementIterator();
+		while (iterator.hasNext()) {
+			Element e = (Element) iterator.next();
+			logger.info(e.asXML());
+
+			try {
+				if (e.getName().toUpperCase().equals("INBO")) {
+					ArrfPek arrf = arrfJaxb.<ArrfPek> fromXml(e.asXML());
+					System.out.println("ArrfPek解析成功!");
+					handleArrfPek(arrf);
+				} else {
+					DepfPek depf = depfJaxb.<DepfPek> fromXml(e.asXML());
+					System.out.println("DepfPek解析成功!");
+					handleDepfPek(depf);
+				}
+			} catch (Exception e2) {
+				logger.error(e2.toString());
+				e2.printStackTrace();
+			}
+		}
+	}
+
+	private void handleArrfPek(ArrfPek arrf) {
+		if (arrf == null)
+			return;
+
+		// 计算扩展字段
+		caculateExtendFields(arrf);
+
+		// 获取原到港航班动态
+		ArrfPek originArrfPek = fltArrfPekDao.selectByArrfId(arrf.getArrfId());
+		// 原航班动态不存在，直接保存，返回
+		if (originArrfPek == null) {
+			arrf.setCreateTime(new Date());
+			fltArrfPekDao.insert(arrf);
+			return;
+		}
+
+		// 获取航班动态的差异
+		Map<String, Object> differences = getPropertyDifferences(originArrfPek, arrf, arrfIgnoredFields);
+
+		// 更新航班动态
+		fltArrfPekDao.update(originArrfPek.getArrfId(), differences);
+
+		// 组织航班动态变更信息，保存航班变更信息
+		FltChangeinfoPek changeinfo = new FltChangeinfoPek();
+		changeinfo.setAlcd(arrf.getFltNo().substring(0, 2));
+		changeinfo.setArrdep(ArrdepFlag.A.toString());
+		changeinfo.setChangeInfo(getChangeInfo(arrf));
+		changeinfo.setCreateTime(new Date());
+		changeinfo.setDomint(arrf.getDomint());
+		changeinfo.setExecuteFlag("N");
+		changeinfo.setFltId(arrf.getArrfId());
+		changeinfo.setFltNo(arrf.getFltNo());
+		changeinfo.setSdt(arrf.getSdt());
+
+		fltChangeinfoPekDao.insert(changeinfo);
+	}
+
+	/**
+	 * 计算扩展字段
+	 */
+	private void caculateExtendFields(ArrfPek arrf) {
+		if (arrf == null)
+			return;
+
+		// 状态
+		caculateArrfState(arrf);
+		// 转盘、第一开放时间
+		if (arrf.getBelts() == null || arrf.getBelts().size() == 0) {
+			arrf.setBltDisp(null);
+			arrf.setFirstBltOt(null);
+		} else {
+			String bltDisp = "";
+
+			for (ArrfBeltPek belt : arrf.getBelts()) {
+				bltDisp += "," + belt.getBltCode();
+
+				if (arrf.getFirstBltOt() == null) {
+					arrf.setFirstBltOt(belt.getBltFbagTime());
+				} else {
+					if (belt.getBltFbagTime() != null
+							&& belt.getBltFbagTime().getTime() < arrf.getFirstBltOt().getTime()) {
+						arrf.setFirstBltOt(belt.getBltFbagTime());
+					}
+				}
+			}
+
+			arrf.setBltDisp(bltDisp.substring(1, bltDisp.length()));
+		}
+	}
+
+	/**
+	 * 对比到港航班动态的需通知信息
+	 * 
+	 * @param newArrfPek
+	 *            新的到港航班动态
+	 * @return 需要通知的变更信息
+	 */
+	private String getChangeInfo(ArrfPek newArrfPek) {
+		ArrfPek originArrfPek = fltArrfPekDao.selectByArrfId(newArrfPek.getArrfId());
+
+		if (originArrfPek == null)
+			return null;
+
+		StringBuilder changeInfo = new StringBuilder(64);
+
+		/*
+		 * 需要通知的动态变更
+		 */
+		if (!DateUtils.compare(newArrfPek.getEstTime(), originArrfPek.getEstTime())) {
+			changeInfo.append(String.format("estTime:%s|",
+					DateUtils.formatDate(newArrfPek.getEstTime(), DatePatterns.POPULAR_DATE24TIME)));
+		}
+		if (!DateUtils.compare(newArrfPek.getActTime(), originArrfPek.getActTime())) {
+			changeInfo.append(String.format("actTime:%s|",
+					DateUtils.formatDate(newArrfPek.getActTime(), DatePatterns.POPULAR_DATE24TIME)));
+		}
+		if (!StringUtils.compareIngoreEmpty(newArrfPek.getBltDisp(), (originArrfPek.getBltDisp()))) {
+			changeInfo.append(String.format("bltDisp:%s|", newArrfPek.getBltDisp()));
+		}
+		if (!DateUtils.compare(newArrfPek.getFirstBltOt(), originArrfPek.getFirstBltOt())) {
+			changeInfo.append(String.format("firstBltOt:%s|",
+					DateUtils.formatDate(newArrfPek.getFirstBltOt(), DatePatterns.POPULAR_DATE24TIME)));
+		}
+		if (!StringUtils.compareIngoreEmpty(newArrfPek.getTerm(), originArrfPek.getTerm())) {
+			changeInfo.append(String.format("term:%s|", newArrfPek.getTerm()));
+		}
+		if (!StringUtils.compareIngoreEmpty(newArrfPek.getExitsNo(), originArrfPek.getExitsNo())) {
+			changeInfo.append(String.format("exitsNo:%s|", newArrfPek.getExitsNo()));
+		}
+		if (!StringUtils.compareIngoreEmpty(newArrfPek.getFltStateCnAbbr(), originArrfPek.getFltStateCnAbbr())) {
+			changeInfo.append(String.format("fltStateCnAbbr:%s|", newArrfPek.getFltStateCnAbbr()));
+		}
+
+		return changeInfo.toString();
+	}
+
+	private void handleDepfPek(DepfPek depf) {
+		if (depf == null)
+			return;
+
+		// 计算扩展字段
+		caculateExtendFields(depf);
+
+		// 获取原到港航班动态
+		DepfPek originDepfPek = fltDepfPekDao.selectByDepfId(depf.getDepfId());
+		// 原航班动态不存在，直接保存，返回
+		if (originDepfPek == null) {
+			depf.setCreateTime(new Date());
+			fltDepfPekDao.insert(depf);
+			return;
+		}
+
+		// 获取航班动态的差异
+		Map<String, Object> differences = getPropertyDifferences(originDepfPek, depf, depfIgnoredFields);
+
+		// 更新航班动态
+		fltArrfPekDao.update(originDepfPek.getDepfId(), differences);
+
+		// 组织航班动态变更信息，保存航班变更信息
+		FltChangeinfoPek changeinfo = new FltChangeinfoPek();
+		changeinfo.setAlcd(depf.getFltNo().substring(0, 2));
+		changeinfo.setArrdep(ArrdepFlag.D.toString());
+		changeinfo.setChangeInfo(getChangeInfo(depf));
+		changeinfo.setCreateTime(new Date());
+		changeinfo.setDomint(depf.getDomint());
+		changeinfo.setExecuteFlag("N");
+		changeinfo.setFltId(depf.getDepfId());
+		changeinfo.setFltNo(depf.getFltNo());
+		changeinfo.setSdt(depf.getSdt());
+
+		fltChangeinfoPekDao.insert(changeinfo);
+	}
+
+	/**
+	 * 计算扩展字段
+	 */
+	private void caculateExtendFields(DepfPek depf) {
+		if (depf == null)
+			return;
+
+		// 状态
+		caculateDepfState(depf);
+		// 值机柜台、第一开放时间
+		if (depf.getCounters() == null || depf.getCounters().size() == 0) {
+			depf.setCntDisp(null);
+			depf.setFirstCntOt(null);
+		} else {
+			String cntDisp = "";
+
+			for (DepfCounterPek counter : depf.getCounters()) {
+				cntDisp += "," + counter.getCntCode();
+
+				if (depf.getFirstCntOt() == null) {
+					depf.setFirstCntOt(counter.getCntOt());
+				} else {
+					if (counter.getCntOt() != null && counter.getCntOt().getTime() < depf.getFirstCntOt().getTime()) {
+						depf.setFirstCntOt(counter.getCntOt());
+					}
+				}
+			}
+
+			depf.setCntDisp(cntDisp.substring(1, cntDisp.length()));
+		}
+
+		// 登机口、第一开放时间
+		if (depf.getGates() == null || depf.getGates().size() == 0) {
+			depf.setGatDisp(null);
+			depf.setFirstGatOt(null);
+		} else {
+			String gatDisp = "";
+
+			for (DepfGatePek gate : depf.getGates()) {
+				gatDisp += "," + gate.getGatCode();
+
+				if (depf.getFirstGatOt() == null) {
+					depf.setFirstGatOt(gate.getGatOt());
+				} else {
+					if (gate.getGatOt() != null && gate.getGatOt().getTime() < depf.getFirstGatOt().getTime()) {
+						depf.setFirstGatOt(gate.getGatOt());
+					}
+				}
+			}
+
+			depf.setGatDisp(gatDisp.substring(1, gatDisp.length()));
+		}
+	}
+
+	/**
+	 * 对比离港航班动态的需通知信息
+	 * 
+	 * @param newDepfPek
+	 *            新的离港航班动态
+	 * @return 需要通知的变更信息
+	 */
+	public String getChangeInfo(DepfPek newDepfPek) {
+		DepfPek originDepfPek = fltDepfPekDao.selectByDepfId(newDepfPek.getDepfId());
+
+		if (originDepfPek == null)
+			return null;
+
+		StringBuilder changeInfo = new StringBuilder(64);
+
+		/*
+		 * 需要通知的动态变更
+		 */
+		if (!DateUtils.compare(newDepfPek.getEstTime(), originDepfPek.getEstTime())) {
+			changeInfo.append(String.format("estTime:%s|",
+					DateUtils.formatDate(newDepfPek.getEstTime(), DatePatterns.POPULAR_DATE24TIME)));
+		}
+		if (!DateUtils.compare(newDepfPek.getActTime(), originDepfPek.getActTime())) {
+			changeInfo.append(String.format("actTime:%s|",
+					DateUtils.formatDate(newDepfPek.getActTime(), DatePatterns.POPULAR_DATE24TIME)));
+		}
+		if (!StringUtils.compareIngoreEmpty(newDepfPek.getCntDisp(), originDepfPek.getCntDisp())) {
+			changeInfo.append(String.format("bltDisp:%s|", newDepfPek.getCntDisp()));
+		}
+		if (!DateUtils.compare(newDepfPek.getFirstCntOt(), originDepfPek.getFirstCntOt())) {
+			changeInfo.append(String.format("firstCntOt:%s|",
+					DateUtils.formatDate(newDepfPek.getFirstCntOt(), DatePatterns.POPULAR_DATE24TIME)));
+		}
+		if (!StringUtils.compareIngoreEmpty(newDepfPek.getGatDisp(), originDepfPek.getGatDisp())) {
+			changeInfo.append(String.format("gatDisp:%s|", newDepfPek.getGatDisp()));
+		}
+		if (!DateUtils.compare(newDepfPek.getFirstGatOt(), originDepfPek.getFirstGatOt())) {
+			changeInfo.append(String.format("firstGatOt:%s|",
+					DateUtils.formatDate(newDepfPek.getFirstGatOt(), DatePatterns.POPULAR_DATE24TIME)));
+		}
+		if (!StringUtils.compareIngoreEmpty(newDepfPek.getTerm(), originDepfPek.getTerm())) {
+			changeInfo.append(String.format("term:%s|", newDepfPek.getTerm()));
+		}
+		if (!StringUtils.compareIngoreEmpty(newDepfPek.getFltStateCnAbbr(), originDepfPek.getFltStateCnAbbr())) {
+			changeInfo.append(String.format("fltStateCnAbbr:%s|", newDepfPek.getFltStateCnAbbr()));
+		}
+
+		return changeInfo.toString();
 	}
 }

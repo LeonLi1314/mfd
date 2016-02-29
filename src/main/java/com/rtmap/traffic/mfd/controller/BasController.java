@@ -20,7 +20,7 @@ import com.rtmap.traffic.mfd.domain.entity.Airline;
 import com.rtmap.traffic.mfd.domain.entity.Country;
 import com.rtmap.traffic.mfd.service.IBasService;
 
-import lqs.frame.util.DateUtils;
+import rtmap.frame.util.DateUtils;
 
 /**
  * 基础数据控制器

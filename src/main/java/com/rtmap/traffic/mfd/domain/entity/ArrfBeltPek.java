@@ -8,6 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.rtmap.traffic.mfd.common.XmlDateAdapter;
 
 /**
  * 首都机场航班行李转盘资源
@@ -17,11 +23,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "flt_arrf_belt_pek")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ArrfBeltPek {
 	@Id
 	@Column(name = "blt_id", updatable = false)
     private String bltId;
 	@Column(name = "arrf_id")
+	@XmlElement(name = "FLID")
     private String arrfId;
 	@Column(name = "flt_no")
     private String fltNo;
@@ -29,28 +37,41 @@ public class ArrfBeltPek {
 	@Column(name = "sdt", columnDefinition = "DATETIME")
     private Date sdt;
     @Column(name = "blt_code")
+	@XmlElement(name = "LTCO")
     private String bltCode;
     @Column(name = "blt_name")
     private String bltName;
     @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_ot", columnDefinition = "DATETIME")
+	@XmlElement(name = "SCST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date bltOt;
     @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_ct", columnDefinition = "DATETIME")
+	@XmlElement(name = "SCET")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date bltCt;
     @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_fbag_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "FIBT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date bltFbagTime;
     @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_lbag_time", columnDefinition = "DATETIME")
+	@XmlElement(name = "LABT")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date bltLbagTime;
     @Column(name = "blt_domint", columnDefinition = "CHAR", length = 1)
+	@XmlElement(name = "DORI")
     private String bltDomint;
     @Column(name = "blt_cls_code")
+	@XmlElement(name = "CARC")
     private String bltClsCode;
     @Column(name = "blt_cls_cn")
+	@XmlElement(name = "CACC")
     private String bltClsCn;
     @Column(name = "blt_cls_en")
+	@XmlElement(name = "CACE")
     private String bltClsEn;
 
     public String getBltId() {

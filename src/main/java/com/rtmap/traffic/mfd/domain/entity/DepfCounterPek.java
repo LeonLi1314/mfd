@@ -8,6 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.rtmap.traffic.mfd.common.XmlDateAdapter;
 
 /**
  * 首都机场航班值班柜台资源
@@ -17,11 +23,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "flt_depf_counter_pek")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DepfCounterPek {
 	@Id
 	@Column(name = "cnt_id", updatable = false)
 	private String cntId;
 	@Column(name = "depf_id")
+	@XmlElement(name = "FLID")
 	private String depfId;
 	@Column(name = "flt_no")
 	private String fltNo;
@@ -29,26 +37,39 @@ public class DepfCounterPek {
 	@Column(name = "sdt", columnDefinition = "DATETIME")
 	private Date sdt;
 	@Column(name = "cnt_code")
+	@XmlElement(name = "COUC")
 	private String cntCode;
 	@Column(name = "cnt_domint", columnDefinition = "CHAR", length = 1)
+	@XmlElement(name = "DORI")
 	private String cntDomint;
 	@Column(name = "cnt_cls")
+	@XmlElement(name = "CCLS")
 	private String cntCls;
 	@Column(name = "cnt_cls_cn")
+	@XmlElement(name = "CClC")
 	private String cntClsCn;
 	@Column(name = "cnt_cls_en")
+	@XmlElement(name = "CClE")
 	private String cntClsEn;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cnt_pot", columnDefinition = "DATETIME")
+	@XmlElement(name = "SCST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date cntPot;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cnt_pct", columnDefinition = "DATETIME")
+	@XmlElement(name = "SCET")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date cntPct;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cnt_ot", columnDefinition = "DATETIME")
+	@XmlElement(name = "ACST")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date cntOt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cnt_ct", columnDefinition = "DATETIME")
+	@XmlElement(name = "ACET")
+	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date cntCt;
 
 	public String getCntId() {

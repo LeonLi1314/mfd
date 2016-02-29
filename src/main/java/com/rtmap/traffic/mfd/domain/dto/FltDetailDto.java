@@ -12,26 +12,28 @@ public class FltDetailDto extends FltInfoDto {
 	/**
 	 * 当fltType为A时不显示；为M时显示共享航班；为S时显示主航班
 	 */
-	private String relFltDesc;
-	private String relFltNos;
-	private String startTimeName;
-	private String startTime;
-	private String destTimeName;
-	private String destTime;
+	private String relFltDesc = "";
+	private String relFltNos = "";
+	private String startTimeName = "";
+	private String startTime = "";
+	private String destTimeName = "";
+	private String destTime = "";
 	/*
 	 * 到港资源信息
 	 */
 	private String bltDisp = "-";
-	private String firstBltOt;
-	private String taxiWait;
+	private String firstBltOt = "-";
+	private String taxiWait = "-";
 	/*
 	 * 离港资源信息
 	 */
 	private String cntDisp = "-";
-	private String firstCntOt;
+	private String firstCntOt = "-";
 	private String gatDisp = "-";
-	private String firstGatOt;
+	private String firstGatOt = "-";
 	private String securityDur = "15";
+	private String securityState = "畅通";
+	private String securityColor = "green";
 
 	public boolean isFollow() {
 		return isFollow;
@@ -159,5 +161,21 @@ public class FltDetailDto extends FltInfoDto {
 
 	public void setSecurityDur(String securityDur) {
 		this.securityDur = securityDur;
+	}
+
+	public String getSecurityState() {
+		return securityState;
+	}
+
+	public void setSecurityState(String securityState) {
+		this.securityState = securityState;
+	}
+
+	public String getSecurityColor() {
+		return securityColor;
+	}
+
+	public void setSecurityColor(String securityColor) {
+		this.securityColor = securityColor;
 	}
 }

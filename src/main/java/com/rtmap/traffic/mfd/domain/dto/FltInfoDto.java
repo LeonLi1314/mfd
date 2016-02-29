@@ -1,8 +1,5 @@
 package com.rtmap.traffic.mfd.domain.dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rtmap.traffic.mfd.domain.ArrdepFlag;
 
 /**
@@ -20,11 +17,11 @@ public class FltInfoDto {
 	private String iata;
 	private String airlineNameCn;
 	private ArrdepFlag arrdep;
-	private Date startSdt;
-	private Date destSdt;
+	private String startSdt;
+	private String destSdt;
 	private String startAirportCn;
 	private String destAirportCn;
-	private String stateCn;
+	private String stateCn="";
 	private String stateColor = "green";
 	private int contractId;
 
@@ -72,24 +69,24 @@ public class FltInfoDto {
 	 * fastjson日期注解
 	 */
 	// @JSONField(format = "HH:mm")
-	@JsonFormat(pattern = "HH:mm")
-	public Date getStartSdt() {
+	// @JsonFormat(pattern = "HH:mm")
+	public String getStartSdt() {
 		return startSdt;
 	}
 
-	public void setStartSdt(Date startSdt) {
+	public void setStartSdt(String startSdt) {
 		this.startSdt = startSdt;
 	}
 	/*
 	 * fastjson日期注解
 	 */
 	// @JSONField(format = "HH:mm")
-	@JsonFormat(pattern = "HH:mm")
-	public Date getDestSdt() {
+	// @JsonFormat(pattern = "HH:mm")
+	public String getDestSdt() {
 		return destSdt;
 	}
 
-	public void setDestSdt(Date destSdt) {
+	public void setDestSdt(String destSdt) {
 		this.destSdt = destSdt;
 	}
 

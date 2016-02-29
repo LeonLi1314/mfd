@@ -2,6 +2,8 @@ package com.rtmap.traffic.mfd.service;
 
 import java.util.List;
 
+import org.dom4j.Element;
+
 import com.rtmap.traffic.mfd.domain.PageRst;
 import com.rtmap.traffic.mfd.domain.cond.ArrdepPlaceCond;
 import com.rtmap.traffic.mfd.domain.cond.FltIdCond;
@@ -19,6 +21,7 @@ import com.rtmap.traffic.mfd.domain.dto.FltInfoDto;
  *
  */
 public interface IFlightService {
+	String test();
 
 	/**
 	 * 根据航班号模糊匹配航班列表
@@ -51,22 +54,34 @@ public interface IFlightService {
 	 * 获取用户关注的航班列表
 	 * 
 	 * @param cond
-	 *           订阅者查询条件
+	 *            订阅者查询条件
 	 * @return 航班列表
 	 */
 	PageRst<FltInfoDto> getFollowedFlights(SubscriberCond cond);
 
 	/**
 	 * 根据摇一摇查询条件获取有限的航班列表
-	 * @param cond 摇一摇查询条件
+	 * 
+	 * @param cond
+	 *            摇一摇查询条件
 	 * @return 航班列表
 	 */
 	List<FltInfoDto> getLimitFlightsByShakeCond(ShakeCond cond);
-	
+
 	/**
 	 * 根据摇一摇查询条件获取航班列表
-	 * @param cond 摇一摇查询条件
+	 * 
+	 * @param cond
+	 *            摇一摇查询条件
 	 * @return 航班列表
 	 */
 	List<FltInfoDto> getFlightsByShakeCond(ShakeCond cond);
+
+	/**
+	 * 执行报文解析入库
+	 * 
+	 * @param data
+	 *            报文DATA节点
+	 */
+	void execute(Element data);
 }

@@ -2,7 +2,7 @@ package com.rtmap.traffic.mfd.cache;
 
 import java.util.List;
 
-import lqs.frame.ui.model.ComboStrItem;
+import rtmap.frame.ui.model.ComboStrItem;
 
 public class DictCache {
 	private static EhcacheUtil util = EhcacheUtil.getInstance();
