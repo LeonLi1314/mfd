@@ -1,5 +1,6 @@
 package com.rtmap.traffic.mfd.dao.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.alibaba.fastjson.JSON;
 import com.rtmap.traffic.mfd.dao.IFltArrfPekDao;
 import com.rtmap.traffic.mfd.domain.cond.FltNoCond;
 import com.rtmap.traffic.mfd.domain.entity.ArrfPek;
@@ -138,9 +138,10 @@ public class FltArrfPekDaoHb extends DaoHbSupport implements IFltArrfPekDao {
 	}
 
 	@Override
-	public int insert(ArrfPek arrfPek) {
-		System.out.println(JSON.toJSONString(arrfPek));
-		return (int) super.insert(arrfPek);
+	public String insert(ArrfPek arrfPek) {
+		Serializable s = super.insert(arrfPek);
+		 System.out.println(s);
+		return s.toString();
 	}
 
 	@Override
@@ -157,10 +158,20 @@ public class FltArrfPekDaoHb extends DaoHbSupport implements IFltArrfPekDao {
 
 		Query query = createQuery(sb.toString());
 		query.setTimestamp("updateTime", new Date());
-		
+
 		for (String key : updateParas.keySet()) {
-			query.setParameter(key, updateParas.get(key));
+			Object o = updateParas.get(key);
+			if (String.class.equals(o.getClass())) {
+				query.setString(key, String.valueOf(o));
+			} else if (Date.class.equals(o.getClass())) {
+				query.setTimestamp(key, (Date) o);
+			} else if (Integer.class.equals(o.getClass())) {
+				query.setInteger(key, (Integer) o);
+			} else {
+				query.setParameter(key, o);
+			}
 		}
+		
 		query.setString("arrfId", arrfId);
 
 		int i = query.executeUpdate();

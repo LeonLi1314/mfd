@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -26,8 +28,9 @@ import com.rtmap.traffic.mfd.common.XmlDateAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DepfCounterPek {
 	@Id
-	@Column(name = "cnt_id", updatable = false)
-	private String cntId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cnt_id", columnDefinition = "INT",unique=true, insertable = false, updatable = false)
+	private Integer cntId;
 	@Column(name = "depf_id")
 	@XmlElement(name = "FLID")
 	private String depfId;
@@ -72,12 +75,12 @@ public class DepfCounterPek {
 	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
 	private Date cntCt;
 
-	public String getCntId() {
+	public Integer getCntId() {
 		return cntId;
 	}
 
-	public void setCntId(String cntId) {
-		this.cntId = cntId == null ? null : cntId.trim();
+	public void setCntId(Integer cntId) {
+		this.cntId = cntId;
 	}
 
 	public String getDepfId() {

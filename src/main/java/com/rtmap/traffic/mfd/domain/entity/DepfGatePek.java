@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -26,8 +28,9 @@ import com.rtmap.traffic.mfd.common.XmlDateAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class DepfGatePek {
 	@Id
-	@Column(name = "gat_id", updatable = false)
-    private String gatId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "gat_id", columnDefinition = "INT",unique=true, insertable = false, updatable = false)
+    private Integer gatId;
     @Column(name = "depf_id")
 	@XmlElement(name = "FLID")
     private String depfId;
@@ -37,7 +40,7 @@ public class DepfGatePek {
    	@Column(name = "sdt", columnDefinition = "DATETIME")
     private Date sdt;
     @Column(name = "gat_code")
-	@XmlElement(name = "FLID")
+	@XmlElement(name = "GATC")
     private String gatCode;
     @Column(name = "gat_domint", columnDefinition = "CHAR", length = 1)
 	@XmlElement(name = "DORI")
@@ -72,12 +75,12 @@ public class DepfGatePek {
 	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
     private Date gatCt;
 
-    public String getGatId() {
+    public Integer getGatId() {
         return gatId;
     }
 
-    public void setGatId(String gatId) {
-        this.gatId = gatId == null ? null : gatId.trim();
+    public void setGatId(Integer gatId) {
+        this.gatId = gatId;
     }
 
     public String getDepfId() {

@@ -23,7 +23,7 @@ abstract class DaoHbSupport {
 	private HibernateTemplate hibernateTemplate;
 	@Resource(name = "jdbcTemplate")
 	private JdbcTemplate jdbcTemplate;
-	
+
 	/**
 	 * 获取hibernate模版
 	 * 
@@ -156,7 +156,7 @@ abstract class DaoHbSupport {
 	 */
 	@SuppressWarnings("unchecked")
 	public <E> List<E> select(String hql) {
-		return (List<E>)hibernateTemplate.find(hql);
+		return (List<E>) hibernateTemplate.find(hql);
 	}
 
 	/**
@@ -174,7 +174,7 @@ abstract class DaoHbSupport {
 			return select(preparedHql);
 		}
 
-		return (List<E>)hibernateTemplate.find(preparedHql, params.toArray());
+		return (List<E>) hibernateTemplate.find(preparedHql, params.toArray());
 	}
 
 	/**
@@ -188,7 +188,7 @@ abstract class DaoHbSupport {
 	 */
 	@SuppressWarnings("unchecked")
 	public <E> List<E> select(String preparedHql, Object[] params) {
-		return (List<E>)hibernateTemplate.find(preparedHql, params);
+		return (List<E>) hibernateTemplate.find(preparedHql, params);
 	}
 
 	/**
@@ -229,5 +229,21 @@ abstract class DaoHbSupport {
 		}
 
 		return jdbcTemplate.update(sql, params.toArray());
+	}
+
+	/**
+	 * 根据唯一主键删除
+	 */
+	@SuppressWarnings("unused")
+	private boolean deleteById(Class<?> type, Serializable id) {
+		Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+		Object persistentInstance = session.load(type, id);
+
+		if (persistentInstance != null) {
+			session.delete(persistentInstance);
+			return true;
+		}
+
+		return false;
 	}
 }

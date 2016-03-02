@@ -14,7 +14,7 @@ import com.rtmap.traffic.mfd.domain.entity.DepfPek;
  *
  */
 public interface IFltDepfPekDao {
-	int insert(DepfPek depfPek);
+	String insert(DepfPek depfPek);
 
 	int update(String depfId, Map<String, Object> updateParas);
 	

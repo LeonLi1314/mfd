@@ -14,7 +14,7 @@ import com.rtmap.traffic.mfd.domain.entity.ArrfPek;
  *
  */
 public interface IFltArrfPekDao {
-	int insert(ArrfPek arrfPek);
+	String insert(ArrfPek arrfPek);
 
 	int update(String arrfId, Map<String, Object> updateParas);
 
