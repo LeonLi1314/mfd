@@ -10,9 +10,19 @@ public enum ArrdepFlag {
 	/**
 	 * 到港
 	 */
-	A,
+	A{
+		public String toLocaleString() {
+			return "进港";
+		}
+	},
 	/**
 	 * 离港
 	 */
-	D
+	D{
+		public String toLocaleString() {
+			return "出港";
+		}
+	};
+	
+	public abstract String toLocaleString();
 }

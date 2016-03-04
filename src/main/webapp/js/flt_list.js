@@ -2,41 +2,35 @@ $(function(){
 	document.documentElement.style.fontSize=document.documentElement.clientWidth/18+'px';
 	var str=window.location.search.substring(1);
     var pageNo=1;
-    var data=JSON.parse(decodeURIComponent(str));
-    //页面初始化执行的函数
-    if(str.indexOf('fltNo')!=-1)
+    if(str)
     {
-    	if(localStorage.listFltCache)
-    	{
-    		$('.loading').hide();
-    		var data=JSON.parse(localStorage.listFltCache);
-    		createList(data);
-    		gotoDetail();
-    	}
-    	else
-    	{
-    		 ajaxNum(1);
-    	}
-    }else if(str.indexOf('airlineCode')!=-1)
-    {
-    	if(localStorage.listAddCache)
-    	{
-    		var data=JSON.parse(localStorage.listAddCache);
-			createList(data);
-    		$('.loading').hide();
-    		gotoDetail();
-    	}
-    	else
-    	{
-    		ajaxAddress(1);
-    	}
+    	var data=JSON.parse(decodeURIComponent(str));
     }
+
+    //页面初始化执行的函数
+    getFlightInfor();
+    //获取航班信息函数
+    function getFlightInfor()
+    {
+	    if(str.indexOf('fltNo')!=-1)
+	    {
+	    	data.pageNo=pageNo;
+		    ajaxInvoke('/mfd/flt/getByFltNoCond.do',data,flightNumSuccess);
+		    localStorage.urlStr='fltNo';
+	    }else if(str.indexOf('airlineCode')!=-1)
+	    {
+	    	data.pageNo=pageNo;
+		    ajaxInvoke('/mfd/flt/getByPlaceCond.do',data,flightAddSuccess);
+		    localStorage.urlStr='airlineCode';
+	    }
+	}
 	//创建列表
 	function createList(arr)
 	{
 		for(var i=0; i<arr.length; i++)
 		{
 			var json=arr[i];
+			console.log(json);
 			var oLi=$('<li data-detail='+encodeURIComponent(JSON.stringify(json))+' data-arrdep='+json['arrdep']+' data-fltId='+json['fltId']+'><div class="title clearfix">'+
 							'<i class="logo fl"></i>'+
 							'<p class="name fl">'+json['airlineNameCn']+json['fltNo']+'</p>'+
@@ -67,10 +61,10 @@ $(function(){
 		var arrdep=$(this).attr('data-arrdep');
 		if(arrdep=='A')
 		{
-			$(this).find('a').attr('href','detail_in.html?'+str);
+			$(this).find('a').attr('href','arr_detail.html?'+str);
 		}else if(arrdep=='D')
 		{
-			$(this).find('a').attr('href','detail_out.html?'+str);
+			$(this).find('a').attr('href','dep_detail.html?'+str);
 		}					
 	}
 	function gotoDetail()
@@ -78,7 +72,7 @@ $(function(){
 		$('.list ul li').off('click',gotoDetailClickEvent).on('click',gotoDetailClickEvent);
 	}
 	//按航班号查询请求成功后的函数
-	function queryFlightNum(data)
+	function flightNumSuccess(data)
 	{
 		if(data)
 		{
@@ -89,7 +83,7 @@ $(function(){
 	    			$('.loading').hide();
 		    		createList(data.rst);
 		    		gotoDetail();
-		    		localStorage.listFltCache=JSON.stringify(data.rst);
+		    		//localStorage.listFltCache=JSON.stringify(data.rst);
 	    		}
 			}else
 			{
@@ -99,13 +93,8 @@ $(function(){
 			}
 		}
 	}
-	function ajaxNum(pageNo)
-	{
-	    data.pageNo=pageNo;
-	    ajaxInvoke('/mfd/flt/getByFltNoCond.do',data,queryFlightNum);
-	}
 	//按起降地查询请求成功后的函数
-	function queryFlightAdd(data)
+	function flightAddSuccess(data)
 	{
 		if(data)
 		{
@@ -115,7 +104,7 @@ $(function(){
 	    		{
 	    			createList(data.rst);
 		    		$('.loading').hide();
-		    		localStorage.listAddCache=JSON.stringify(data.rst);
+		    		//localStorage.listAddCache=JSON.stringify(data.rst);
 		    		gotoDetail();
 	    		}
 			}else
@@ -129,13 +118,7 @@ $(function(){
 			$('.loading').hide();
 			$('.msg').show();
 			$('.msg').html('没有查到更多的航班信息');
-		}
-		
-	}
-	function ajaxAddress(pageNo)
-	{
-	    data.pageNo=pageNo;
-	    ajaxInvoke('/mfd/flt/getByPlaceCond.do',data,queryFlightAdd);
+		}	
 	}
 	var oList=$('.list');
 	var oBox=$('.box');
@@ -148,13 +131,7 @@ $(function(){
 		{
 			$('.msg').show();
 			pageNo++;
-		    if(str.indexOf('fltNo')!=-1)
-		    {
-			    ajaxNum(pageNo);
-		    }else
-		    {
-		    	ajaxAddress(pageNo);
-		    }
+		   	getFlightInfor()
 		}else
 		{
 			$('.loading').hide();
@@ -167,4 +144,5 @@ $(function(){
 		window.history.back();
 	}
 	$('.back').on('click',backFn);	
+
 });

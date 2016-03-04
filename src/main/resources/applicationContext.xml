@@ -21,12 +21,12 @@
 		<property name="pageSize" value="10" />
 	</bean>
 
-	<bean id="flightPekSynchronize" class="com.rtmap.traffic.mfd.service.impl.FlightPekSynchronize"
-		init-method="afterPropertiesSet">
-		<property name="httpClient">
-			<ref bean="pekHttpClient" />
-		</property>
-	</bean>
+	<!-- 航班动态数据同步线程 -->
+<!-- 	<bean id="flightPekSynchronize" class="com.rtmap.traffic.mfd.service.impl.FlightPekSynchronize"> -->
+<!-- 		<property name="httpClient"> -->
+<!-- 			<ref bean="pekHttpClient" /> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
 
 	<bean id="pekHttpClient" class="rtmap.frame.util.HttpClientUtils">
 		<property name="scheme" value="http" />
@@ -34,6 +34,9 @@
 		<property name="actionPath" value="/mfd/bas/currentDateTime.do" />
 		<property name="port" value="8080" />
 	</bean>
+	
+	<!-- 动态变更处理线程 -->
+<!-- 	<bean id="FlightChangeHandler" class="com.rtmap.traffic.mfd.service.impl.FlightChangeHandler" /> -->
 </beans>
 
 

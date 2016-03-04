@@ -44,7 +44,7 @@ public class MsgWechatCenter {
 	@Column(name = "create_time", columnDefinition = "TIMESTAMP")
     private Date createTime;
     @Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "update_time", columnDefinition = "DATETIME")
+	@Column(name = "update_time", columnDefinition = "TIMESTAMP")
     private Date updateTime;
     @Column(name = "read_flag", columnDefinition = "CHAR", length = 1)
     private String readFlag;

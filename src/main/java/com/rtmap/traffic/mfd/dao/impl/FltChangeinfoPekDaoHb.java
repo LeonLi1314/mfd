@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -30,7 +31,7 @@ public class FltChangeinfoPekDaoHb extends DaoHbSupport implements IFltChangeinf
 				"update FltChangeinfoPek set executeFlag = 'Y',updateTime = :updateTime where contractId = :contractId");
 		query.setTimestamp("updateTime", new Date());
 		query.setInteger("recId", recId);
-		
+
 		return query.executeUpdate();
 	}
 
@@ -41,9 +42,15 @@ public class FltChangeinfoPekDaoHb extends DaoHbSupport implements IFltChangeinf
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<FltChangeinfoPek> selectNotExecuted() {
+	// @Transactional(propagation = Propagation.NEVER)
+	public List<FltChangeinfoPek> selectNotExecuted(int limit) {
 		Criteria criteria = createCriteria(FltChangeinfoPek.class);
 		criteria.add(Restrictions.eq("executeFlag", "N"));
+
+		if (limit > 0) {
+			criteria.setMaxResults(limit);
+			criteria.addOrder(Order.asc("create_time"));
+		}
 
 		return criteria.list();
 	}

@@ -15,18 +15,22 @@ import com.rtmap.traffic.mfd.domain.entity.SubscribeContract;
 public interface ISubscribeContractDao {
 	/**
 	 * 新增
-	 * @param entity 订阅契约实体
+	 * 
+	 * @param entity
+	 *            订阅契约实体
 	 * @return 受影响的行数
 	 */
 	int insert(SubscribeContract entity);
-	
+
 	/**
 	 * 删除
-	 * @param contractId 主键
+	 * 
+	 * @param contractId
+	 *            主键
 	 * @return 受影响的行数
 	 */
 	int delete(int contractId);
-	
+
 	/**
 	 * 根据订阅人查询条件查询有效的订阅契约
 	 * 
@@ -38,8 +42,19 @@ public interface ISubscribeContractDao {
 
 	/**
 	 * 根据航班Id条件查询订阅信息
-	 * @param cond 航班Id条件
+	 * 
+	 * @param cond
+	 *            航班Id条件
 	 * @return 航班订阅信息
 	 */
 	SubscribeContract selectContractByFltIdCond(FltIdCond cond);
+
+	/**
+	 * 根据关键信息获取有效的订阅契约
+	 * 
+	 * @param subscribeKeywords
+	 *            订阅的关键信息
+	 * @return 订阅契约集合
+	 */
+	List<SubscribeContract> selectEffectByKeywords(String subscribeKeywords);
 }

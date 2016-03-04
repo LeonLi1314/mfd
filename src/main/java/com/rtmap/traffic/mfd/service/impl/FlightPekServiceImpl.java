@@ -24,6 +24,7 @@ import com.rtmap.traffic.mfd.dao.IFltDepfCounterPekDao;
 import com.rtmap.traffic.mfd.dao.IFltDepfGatePekDao;
 import com.rtmap.traffic.mfd.dao.IFltDepfPekDao;
 import com.rtmap.traffic.mfd.domain.ArrdepFlag;
+import com.rtmap.traffic.mfd.domain.FltChangeinfoFiledsConst;
 import com.rtmap.traffic.mfd.domain.FltTypeConst;
 import com.rtmap.traffic.mfd.domain.PageRst;
 import com.rtmap.traffic.mfd.domain.cond.ArrdepPlaceCond;
@@ -733,40 +734,12 @@ public class FlightPekServiceImpl implements IFlightService {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public void execute(Element data) {
-		// List arrfs = data.elements("INBO");
-		//
-		// if (arrfs != null && arrfs.size() > 0) {
-		// Iterator arrfIterator = arrfs.iterator();
-		// JaxbUtils inboJaxb = new JaxbUtils(ArrfPek.class);
-		//
-		// while (arrfIterator.hasNext()) {
-		// Element e = (Element) arrfIterator.next();
-		// ArrfPek arrf = inboJaxb.<ArrfPek> fromXml(e.asXML());
-		//
-		//
-		// }
-		// }
-		//
-		// List depfs = data.elements("FLST");
-		//
-		// if (depfs != null && depfs.size() > 0) {
-		// Iterator depfInterator = depfs.iterator();
-		// JaxbUtils depfJaxb = new JaxbUtils(DepfPek.class);
-		//
-		// while (depfInterator.hasNext()) {
-		// Element e = (Element) depfInterator.next();
-		// DepfPek depf = depfJaxb.<DepfPek> fromXml(e.asXML());
-		//
-		//
-		// }
-		// }
-
 		JaxbUtils arrfJaxb = new JaxbUtils(ArrfPek.class);
 		JaxbUtils depfJaxb = new JaxbUtils(DepfPek.class);
 		Iterator iterator = data.elementIterator();
 		while (iterator.hasNext()) {
 			Element e = (Element) iterator.next();
-			logger.info(e.asXML());
+			// logger.info(e.asXML());
 
 			try {
 				if (e.getName().toUpperCase().equals("INBO")) {
@@ -895,28 +868,24 @@ public class FlightPekServiceImpl implements IFlightService {
 		 * 需要通知的动态变更
 		 */
 		if (!DateUtils.compare(newArrfPek.getEstTime(), originArrfPek.getEstTime())) {
-			changeInfo.append(String.format("estTime:%s|",
+			changeInfo.append(String.format("%s:%s|", FltChangeinfoFiledsConst.estTime,
 					DateUtils.formatDate(newArrfPek.getEstTime(), DatePatterns.POPULAR_DATE24TIME)));
 		}
 		if (!DateUtils.compare(newArrfPek.getActTime(), originArrfPek.getActTime())) {
-			changeInfo.append(String.format("actTime:%s|",
+			changeInfo.append(String.format("%s:%s|", FltChangeinfoFiledsConst.actTime,
 					DateUtils.formatDate(newArrfPek.getActTime(), DatePatterns.POPULAR_DATE24TIME)));
 		}
 		if (!StringUtils.compareIngoreEmpty(newArrfPek.getBltDisp(), (originArrfPek.getBltDisp()))) {
-			changeInfo.append(String.format("bltDisp:%s|", newArrfPek.getBltDisp()));
+			changeInfo.append(String.format("%s:%s|", FltChangeinfoFiledsConst.bltDisp, newArrfPek.getBltDisp()));
 		}
-		// if (!DateUtils.compare(newArrfPek.getFirstBltOt(),
-		// originArrfPek.getFirstBltOt())) {
-		// changeInfo.append(String.format("firstBltOt:%s|",
-		// DateUtils.formatDate(newArrfPek.getFirstBltOt(),
-		// DatePatterns.POPULAR_DATE24TIME)));
-		// }
 		if (!StringUtils.compareIngoreEmpty(newArrfPek.getTerm(), originArrfPek.getTerm())
 				|| !StringUtils.compareIngoreEmpty(newArrfPek.getExitsNo(), originArrfPek.getExitsNo())) {
-			changeInfo.append(String.format("term-exitsNo:%s-%s|", newArrfPek.getTerm(), newArrfPek.getExitsNo()));
+			changeInfo.append(String.format("%s:%s-%s|", FltChangeinfoFiledsConst.termOrExitsNo, newArrfPek.getTerm(),
+					newArrfPek.getExitsNo()));
 		}
 		if (!StringUtils.compareIngoreEmpty(newArrfPek.getFltStateCnAbbr(), originArrfPek.getFltStateCnAbbr())) {
-			changeInfo.append(String.format("fltStateCnAbbr:%s|", newArrfPek.getFltStateCnAbbr()));
+			changeInfo.append(
+					String.format("%s:%s|", FltChangeinfoFiledsConst.fltStateCnAbbr, newArrfPek.getFltStateCnAbbr()));
 		}
 
 		return changeInfo.toString();
@@ -1067,37 +1036,23 @@ public class FlightPekServiceImpl implements IFlightService {
 		 * 需要通知的动态变更
 		 */
 		if (!DateUtils.compare(newDepfPek.getEstTime(), originDepfPek.getEstTime())) {
-			changeInfo.append(String.format("estTime:%s|",
+			changeInfo.append(String.format("%s:%s|", FltChangeinfoFiledsConst.estTime,
 					DateUtils.formatDate(newDepfPek.getEstTime(), DatePatterns.POPULAR_DATE24TIME)));
 		}
 		if (!DateUtils.compare(newDepfPek.getActTime(), originDepfPek.getActTime())) {
-			changeInfo.append(String.format("actTime:%s|",
+			changeInfo.append(String.format("%s:%s|", FltChangeinfoFiledsConst.actTime,
 					DateUtils.formatDate(newDepfPek.getActTime(), DatePatterns.POPULAR_DATE24TIME)));
 		}
-		// if (!StringUtils.compareIngoreEmpty(newDepfPek.getCntDisp(),
-		// originDepfPek.getCntDisp())) {
-		// changeInfo.append(String.format("cntDisp:%s|",
-		// newDepfPek.getCntDisp()));
-		// }
 		if (!DateUtils.compare(newDepfPek.getFirstCntOt(), originDepfPek.getFirstCntOt())) {
-			changeInfo.append(String.format("firstCntOt:%s|",
+			changeInfo.append(String.format("%s:%s|", FltChangeinfoFiledsConst.firstCntOt,
 					DateUtils.formatDate(newDepfPek.getFirstCntOt(), DatePatterns.POPULAR_DATE24TIME)));
 		}
 		if (!StringUtils.compareIngoreEmpty(newDepfPek.getGatDisp(), originDepfPek.getGatDisp())) {
-			changeInfo.append(String.format("gatDisp:%s|", newDepfPek.getGatDisp()));
+			changeInfo.append(String.format("%s:%s|", FltChangeinfoFiledsConst.gatDisp, newDepfPek.getGatDisp()));
 		}
-		// if (!DateUtils.compare(newDepfPek.getFirstGatOt(),
-		// originDepfPek.getFirstGatOt())) {
-		// changeInfo.append(String.format("firstGatOt:%s|",
-		// DateUtils.formatDate(newDepfPek.getFirstGatOt(),
-		// DatePatterns.POPULAR_DATE24TIME)));
-		// }
-		// if (!StringUtils.compareIngoreEmpty(newDepfPek.getTerm(),
-		// originDepfPek.getTerm())) {
-		// changeInfo.append(String.format("term:%s|", newDepfPek.getTerm()));
-		// }
 		if (!StringUtils.compareIngoreEmpty(newDepfPek.getFltStateCnAbbr(), originDepfPek.getFltStateCnAbbr())) {
-			changeInfo.append(String.format("fltStateCnAbbr:%s|", newDepfPek.getFltStateCnAbbr()));
+			changeInfo.append(
+					String.format("%s:%s|", FltChangeinfoFiledsConst.fltStateCnAbbr, newDepfPek.getFltStateCnAbbr()));
 		}
 
 		return changeInfo.toString();

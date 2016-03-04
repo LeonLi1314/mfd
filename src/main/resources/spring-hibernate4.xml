@@ -69,7 +69,7 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.connection.SetBigStringTryClob">true</prop>
 				<prop key="hibernate.generate_statistics">true</prop>
@@ -132,6 +132,7 @@
 			<tx:method name="handle*" propagation="REQUIRED" />
 			<tx:method name="follow*" propagation="REQUIRED"  />
 			<tx:method name="unfollow*" propagation="REQUIRED" />
+			<tx:method name="execute*" propagation="REQUIRED" />
 			<!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
 			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
 			<tx:method name="*" />

@@ -1,12 +1,10 @@
-
 .box .flight,.box .address{padding:0 1rem; width:16rem;}
 .box .nav{margin:1rem 1rem 0.9rem; width:16rem; height:1.6rem;overflow: hidden;border:1px solid #767676; 
 	border-radius: 0.15rem; box-sizing:border-box;left:0; top:1.5rem;background:#f1f3f4; z-index:2;}
-.box .nav ul{width:16rem;height:1.6rem;display:-webkit-box;}
-.box .nav ul li{-webkit-box-flex:1;height:1.6rem;text-align: center;
+.box .nav ul{width:16rem;height:1.6rem;display:-webkit-box; margin-left:-1px;}
+.box .nav ul li{-webkit-box-flex:1; box-flex:1;height:1.6rem;text-align: center;
 	line-height: 1.6rem; border-left:1px solid #767676; 
-	 font-size:0.76rem;}
-.box .nav ul li.left{border-left:none;}
+	 font-size:0.76rem; box-sizing:border-box;}
 .box .nav ul li.active{background:#767676; color:#fff;}
 .box .cont{display:none;}
 .box .cont.active{display:block;}
@@ -21,12 +19,12 @@
 margin-left:-1px; box-sizing:border-box;}
 .box .flight-date .sub-nav li{height:1.33rem; text-align: center;
 line-height: 1.33rem; border-left:1px solid #767676;
-	-webkit-box-flex:1;  font-size:0.7rem;}
+	-webkit-box-flex:1; box-flex:1;  font-size:0.7rem;}
 .box .flight-date .sub-nav li.active{background:#767676; color:#fff;}
 .box .flight-date .sub-nav li.left{border-left:none;}
 .box .flight-date .date{width:16rem; overflow: hidden;}
 .box .flight-date .date ul{ width:16rem; display:-webkit-box; margin-left:-1px;}
-.box .flight-date .date ul li{-webkit-box-flex:1; border-left:1px solid #d8d8db;
+.box .flight-date .date ul li{-webkit-box-flex:1; box-flex:1; border-left:1px solid #d8d8db;
 color:#d8d8db; font-size:0.65rem; text-align:center; line-height: 1rem;}
 .box .flight-date .date ul li p:nth-child(2){font-size:0.97rem;}
 .box .flight-date .date ul li.active{color:#4f4f5f;;}
@@ -50,7 +48,7 @@ background-size:cover; position:absolute; left:50%; top:50%; margin-left:-0.37re
 margin-top:-0.37rem; width:0.75rem; height:0.75rem;}
 .box .flight .history .his-list ul{width:16rem; display:-webkit-box; height:2.4rem;
 line-height: 2.4rem; color:#4f4f5f;}
-.box .flight .history .his-list ul li{-webkit-box-flex:1; text-align: center;font-size:0.55rem;}
+.box .flight .history .his-list ul li{-webkit-box-flex:1; box-flex:1;text-align: center;font-size:0.55rem;}
 
 .box .address .enter{height:1.6rem; line-height: 1.6rem; padding:0;}
 .box .address .flight-date .title{padding-top:0.9rem;}
@@ -93,7 +91,7 @@ text-align: left;}
 .list .list-cont .cont .letter .title{margin-bottom:0.3rem;}
 .list .list-cont .cont .letter .title-box{border-bottom:1px solid #d8d8db;}
 .list .list-cont .cont .letter .sub-title{font-size:0.63rem; color:#09091a;
-padding:0.3rem 0;   width:6rem;}
+padding:0.3rem 0;   width:16rem;}
 .list .list-cont .cont .letter .letter-name .sub-cont{margin-bottom:0.5rem;
 border-bottom:1px solid #d8d8db; display:none; overflow:hidden;}
 .list .list-cont .cont .letter .letter-name .sub-cont ul{margin-top:-1px; }
@@ -107,3 +105,13 @@ color:#4f4f5f;border-top:1px solid #eceeef; line-height: 2rem;}
 overflow:hidden;}
 .search-list li{font-size:0.8rem;
 color:#4f4f5f;border-bottom:1px solid #eceeef; line-height: 2rem;}
+.box .boxTips{width:100%; height:100%;position:fixed; left:0; top:0; z-index: 2;
+background:rgba(0,0,0,0.3); display:none;}
+.box .boxTips .boxTips-cont{width:14rem; height:6rem; position:absolute;left:50%;
+top:50%; margin-left:-7rem; margin-top:-3rem; background:#fff; font-size:0.76rem; 
+color:#000; padding:1rem; box-sizing:border-box; text-align: center;}
+.box .boxTips .boxTips-cont p{margin-bottom:1rem;}
+.box .boxTips .boxTips-btn{width:10rem; margin:0 1rem; text-align: center;}
+.box .boxTips .boxTips-btn div{border:1px solid #ccc; width:4rem; height:1.3rem; text-align: center;
+line-height: 1.3rem; }
+.box .boxTips .boxTips-btn .cancel{margin-right:1rem;}

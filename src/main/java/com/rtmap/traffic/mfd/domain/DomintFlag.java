@@ -10,13 +10,27 @@ public enum DomintFlag {
 	/**
 	 * 国内
 	 */
-	D,
+	D {
+		public String toLocaleString() {
+			return "国内";
+		}
+	},
 	/**
 	 * 国际
 	 */
-	I,
+	I {
+		public String toLocaleString() {
+			return "国际";
+		}
+	},
 	/**
-	 * 国内国内混合
+	 * 国际国内混合
 	 */
-	M
+	M {
+		public String toLocaleString() {
+			return "国际国内混合";
+		}
+	};
+
+	public abstract String toLocaleString();
 }

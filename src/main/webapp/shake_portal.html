@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>北京首都机场</title>
+	<link rel="stylesheet" href="css/flt_common.css">
+	<link rel="stylesheet" href="css/flt_list.css">
+	<script src="js/flt_common.js"></script>
+	<script>
+	/*var category=window.location.search.substring(1);*/
+	if(getQueryString('category').toLowerCase()=='gate')
+	{
+		window.location.href='shake_gate.html';
+	}else
+	{
+		window.location.href='flt_query.html';
+	}
+	
+	</script>
+</head>
+<body>
+</body>
+</html>

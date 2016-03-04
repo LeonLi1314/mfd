@@ -1,27 +1,4 @@
 var oLoad=$('<div class="loading"><i></i></div>');
-function ajaxInit(url,successFn)
-{
-	url=url+'&openId=openId&currAirportCode=PEK&subscribeId=1&subscriberId=openId&sourceCode=PEK-WECHAT-SHAKE&subscribeModule=FLIGHT&subscribeEvent=DYNAMICS'
-	$.ajax({
-		beforeSend:function()
-		{
-			oLoad.appendTo($('.wrap'));
-			if($('.msg').css('display')=='block')
-			{
-				$('.loading').hide();
-			}else
-			{
-				$('.loading').show();
-			}
-		},
-		url:url,
-		success:successFn,
-		complete:function(){
-			$('.loading').hide();
-		}
-	});
-}
-
 function ajaxInvoke(url,data,successFn)
 {
 	$.ajax({
@@ -62,3 +39,17 @@ function tab(oParent)
 	}
 }
 
+function trim(str)
+{
+	var reg=/\s/g;
+	return str.replace(reg,'');
+}
+
+function getQueryString(name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null) {
+        return unescape(r[2]);
+    }
+    return null;
+}

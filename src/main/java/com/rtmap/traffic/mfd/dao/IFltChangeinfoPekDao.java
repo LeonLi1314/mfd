@@ -33,7 +33,8 @@ public interface IFltChangeinfoPekDao {
     
     /**
      * 获取未执行的记录
+     * @param limit 前几条（小于等于0时不限制）
      * @return 未执行的记录集合
      */
-    List<FltChangeinfoPek> selectNotExecuted();
+    List<FltChangeinfoPek> selectNotExecuted(int limit);
 }

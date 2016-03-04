@@ -70,4 +70,15 @@ public class SubscribeContractDaoHb extends DaoHbSupport implements ISubscribeCo
 
 		return (SubscribeContract)criteria.uniqueResult();
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<SubscribeContract> selectEffectByKeywords(String subscribeKeywords) {
+		Criteria criteria = createCriteria(SubscribeContract.class);
+		criteria.add(Restrictions.eq("subscribeKeywords", subscribeKeywords));
+		criteria.add(Restrictions.eq("deleteFlag", "N"));
+		criteria.add(Restrictions.ge("invalidTime", new Date()));
+
+		return criteria.list();
+	}
 }

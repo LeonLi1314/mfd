@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import org.dom4j.Document;
@@ -54,7 +56,29 @@ public class FlightPekSynchronize {
 	}
 
 	private Thread thread;
+	/*
+	 * 处理间隔时间
+	 */
+	private int interval = 10;
 
+	public int getInterval() {
+		return interval;
+	}
+
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
+
+	@PreDestroy
+	public void destroy() {
+		if (thread == null || thread.isInterrupted())
+			return;
+
+		thread.interrupt();
+		System.out.println("航班动态变更处理线程结束");
+	}
+	
+	@PostConstruct
 	public void afterPropertiesSet() throws Exception {
 		thread = new Thread() {
 			public void run() {
@@ -87,12 +111,13 @@ public class FlightPekSynchronize {
 						map.put("syncTime", Long.toString(reqTime.getTime()));
 						// 调用webservice，返回报文数据
 						reqTime = new Date();
-						String msg = httpClient.get(map);
+						// String msg = httpClient.get(map);
+						String msg = "";
 						Element outmsg = getMsgElement(msg);
 						MetaElement meta = getMeta(outmsg);
 
 						if (meta.getOpResult().toUpperCase().equals("C")) {
-							System.out.println("-----------服务端正常------------");
+							System.out.println("-----------远程接口返回数据正常------------");
 							if (meta.getCount() > 0) {
 								factory.getService(AirportCodes.PEK).execute(outmsg.element("DATA"));
 							}
@@ -103,19 +128,19 @@ public class FlightPekSynchronize {
 							String content = objectMapper.writeValueAsString(sc);
 							FileUtils.overrideFileMethodA(url.getPath(), content);
 						} else {// 获取报文失败
-							System.out.println("-----------服务端错误------------");
+							System.out.println("-----------远程接口返回数据错误------------");
 							// 记录失败日志
-							String error = "报文获取失败：" + meta.getError().getCode() + "-" + meta.getError().getMessage();
+							String error = "远程接口端处理失败：" + meta.getError().getCode() + "-" + meta.getError().getMessage();
 							logger.info(error);
 						}
 
-						System.out.println("-----------结束循环------------");
+						System.out.println("-----------单次循环结束------------");
 					} catch (Exception e) {
 						logger.error(e.toString());
 						e.printStackTrace();
 					} finally {
 						try {
-							Thread.sleep(10000);
+							Thread.sleep(interval * 1000);
 						} catch (InterruptedException e) {
 							logger.error(e.toString());
 						}
