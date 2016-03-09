@@ -22,7 +22,9 @@ public class MsgWechatCenterDaoHb extends DaoHbSupport implements IMsgWechatCent
 		if (list == null || list.size() == 0)
 			return;
 
-		Session session = super.getCurrentSession();
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		// Session session = super.getCurrentSession();
+		// session.beginTransaction();
 
 		for (int i = 0; i < list.size(); i++) {
 			session.save(list.get(i));
@@ -37,6 +39,9 @@ public class MsgWechatCenterDaoHb extends DaoHbSupport implements IMsgWechatCent
 			session.flush();
 			session.clear();
 		}
+
+		// session.getTransaction().commit();
+		session.close();
 	}
 
 	@Override
@@ -49,12 +54,15 @@ public class MsgWechatCenterDaoHb extends DaoHbSupport implements IMsgWechatCent
 		Long count = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 		return count.intValue();
 	}
-	
+
 	@Override
-	public int selectMessagesTotalCount(String openId) {
+	public int selectMessagesTotalCount(String openId, boolean isAll) {
 		Criteria criteria = createCriteria(MsgWechatCenter.class);
 		criteria.add(Restrictions.eq("openId", openId));
 		criteria.add(Restrictions.eq("deleteFlag", "N"));
+		if (!isAll) {
+			criteria.add(Restrictions.eq("readFlag", "N"));
+		}
 
 		Long count = (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 		return count.intValue();
@@ -62,13 +70,16 @@ public class MsgWechatCenterDaoHb extends DaoHbSupport implements IMsgWechatCent
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<MsgWechatCenter> selectPageMessages(PageCond<String> cond) {
+	public List<MsgWechatCenter> selectPageMessages(PageCond<String> cond, boolean isAll) {
 		Criteria criteria = createCriteria(MsgWechatCenter.class);
 		criteria.setFirstResult((cond.getPageNo() - 1) * cond.getPageSize());
 		criteria.setMaxResults(cond.getPageSize());
 		criteria.add(Restrictions.eq("openId", cond.getCond()));
 		criteria.add(Restrictions.eq("deleteFlag", "N"));
 		criteria.addOrder(Order.asc("createTime"));
+		if (!isAll) {
+			criteria.add(Restrictions.eq("readFlag", "N"));
+		}
 
 		List<MsgWechatCenter> rst = criteria.list();
 
@@ -86,7 +97,7 @@ public class MsgWechatCenterDaoHb extends DaoHbSupport implements IMsgWechatCent
 	}
 
 	@Override
-	public void delete(int msgId) {
+	public void updateDeleteFlag(int msgId) {
 		Query query = createQuery(
 				"update MsgWechatCenter set deleteFlag = 'Y',updateTime = :updateTime where msgId = :msgId");
 		query.setTimestamp("updateTime", new Date());

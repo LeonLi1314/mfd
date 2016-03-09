@@ -2,6 +2,7 @@ $(function(){
 	document.documentElement.style.fontSize=document.documentElement.clientWidth/18+'px';
 	var str=window.location.search.substring(1);
     var pageNo=1;
+    var bFlag=true;
     if(str)
     {
     	var data=JSON.parse(decodeURIComponent(str));
@@ -30,7 +31,6 @@ $(function(){
 		for(var i=0; i<arr.length; i++)
 		{
 			var json=arr[i];
-			console.log(json);
 			var oLi=$('<li data-detail='+encodeURIComponent(JSON.stringify(json))+' data-arrdep='+json['arrdep']+' data-fltId='+json['fltId']+'><div class="title clearfix">'+
 							'<i class="logo fl"></i>'+
 							'<p class="name fl">'+json['airlineNameCn']+json['fltNo']+'</p>'+
@@ -74,16 +74,17 @@ $(function(){
 	//按航班号查询请求成功后的函数
 	function flightNumSuccess(data)
 	{
+		//console.log(data);
 		if(data)
 		{
 			if(data.rst.length>0)
 			{
 	    		if(data.totalPage>=pageNo)
 	    		{
+	    			bFlag=true;
 	    			$('.loading').hide();
 		    		createList(data.rst);
 		    		gotoDetail();
-		    		//localStorage.listFltCache=JSON.stringify(data.rst);
 	    		}
 			}else
 			{
@@ -102,9 +103,9 @@ $(function(){
 			{
 	    		if(data.totalPage>=pageNo)
 	    		{
+	    			bFlag=true;
 	    			createList(data.rst);
 		    		$('.loading').hide();
-		    		//localStorage.listAddCache=JSON.stringify(data.rst);
 		    		gotoDetail();
 	    		}
 			}else
@@ -129,9 +130,14 @@ $(function(){
 		var top=oList.outerHeight()-oBoxTop;
 		if(scrollTop>=top)
 		{
-			$('.msg').show();
-			pageNo++;
-		   	getFlightInfor()
+			if(bFlag)
+			{
+				bFlag=false;
+				$('.msg').show();
+				pageNo++;
+				console.log(pageNo);
+			   	getFlightInfor();
+			}
 		}else
 		{
 			$('.loading').hide();
@@ -144,5 +150,9 @@ $(function(){
 		window.history.back();
 	}
 	$('.back').on('click',backFn);	
+	//获取实时消息
+	clearInterval(timer);
+	messageSign();
+	timer=setInterval(messageSign,10000);
 
 });

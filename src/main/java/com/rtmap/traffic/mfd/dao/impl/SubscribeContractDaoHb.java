@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -74,11 +75,16 @@ public class SubscribeContractDaoHb extends DaoHbSupport implements ISubscribeCo
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<SubscribeContract> selectEffectByKeywords(String subscribeKeywords) {
-		Criteria criteria = createCriteria(SubscribeContract.class);
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Criteria criteria = session.createCriteria(SubscribeContract.class);
+		//  Criteria criteria = createCriteria(SubscribeContract.class);
 		criteria.add(Restrictions.eq("subscribeKeywords", subscribeKeywords));
 		criteria.add(Restrictions.eq("deleteFlag", "N"));
 		criteria.add(Restrictions.ge("invalidTime", new Date()));
 
-		return criteria.list();
+		List<SubscribeContract> rst = criteria.list();
+		session.close();
+		
+		return rst;
 	}
 }

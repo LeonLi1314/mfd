@@ -1,20 +1,7 @@
-//aaa();
 $(function(){
-	//console.log(window.location.search);
 	document.documentElement.style.fontSize=document.documentElement.clientWidth/18+'px';
 	var str=window.location.search.substring(1);
 	var arr=str.split('&');
-	/*var beaconId;
-	if(str){
-		for(var i=0; i<arr.length; i++)
-		{
-			var arrTemp=arr[i].split('=');
-			if(arrTemp[0]=='beaconId')
-			{
-				beaconId=arrTemp[1];
-			}
-		}
-	}*/
 	var beaconId=getQueryString('beaconId');
 	var shakeData={beaconId:beaconId};
 	ajaxInvoke('/mfd/flt/getLimitByShakeCond.do',shakeData,function(data){

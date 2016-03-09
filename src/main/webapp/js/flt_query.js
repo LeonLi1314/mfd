@@ -1,5 +1,10 @@
 $(function(){
 	document.documentElement.style.fontSize=document.documentElement.clientWidth/18+'px';
+	//清空localStorage
+	localStorage.removeItem('companyIntCache');
+	localStorage.removeItem('companyDomCache');
+	localStorage.removeItem('domCityDataCache');
+	localStorage.removeItem('intCityDataCache');
 	//导航切换
 	tab($('.box'));
 	//城市切换
@@ -28,6 +33,12 @@ $(function(){
 		$('.box .cont').removeClass('active');
 		$('.box .nav li').eq(2).addClass('active');
 		$('.box .cont').eq(2).addClass('active');	
+	}else
+	{
+		$('.box .nav li').removeClass('active');
+		$('.box .cont').removeClass('active');
+		$('.box .nav li').eq(0).addClass('active');
+		$('.box .cont').eq(0).addClass('active');
 	}
 	//----------按航班号查询-----------------按航班号查询-------------按航班号查-----------
 	//格式化时间
@@ -669,12 +680,25 @@ $(function(){
     {
 		if(data)
 		{
-    		createFollowList(data.rst);
-    		$('.cont-ul .cancel').off('click',cancelClickEvent).on('click',cancelClickEvent);
-		    gotoDetail();
-		    localStorage.urlStr='follow';
+			if(data.rst.length>0)
+			{
+	    		createFollowList(data.rst);
+	    		$('.cont-ul .cancel').off('click',cancelClickEvent).on('click',cancelClickEvent);
+			    gotoDetail();
+			    localStorage.urlStr='follow';
+			}
+			else
+			{
+				//console.log(1);
+				$('.box .list').html('对不起，未查询到您关注的航班信息');
+				$('.box .list').css({fontSize:'0.76rem',textAlign:'center'});
+				localStorage.urlStr='';
+			}
 		}else{
-			$('.box .list').html('您没有关注任何航班信息');
+			//console.log(1);
+			$('.box .list').html('对不起，未查询到您关注的航班信息');
+			$('.box .list').css({fontSize:'0.76rem',textAlign:'center'});
+			localStorage.urlStr='';
 		} 		
     }
 	//取消关注
@@ -693,7 +717,7 @@ subscribeEvent:'DYNAMICS'};
     	for(var i=0; i<arr.length; i++)
     	{
     		var json=arr[i];
-    		console.log(json);
+    		//console.log(json);
     		var oLi=$('<li data-detail='+encodeURIComponent(JSON.stringify(json))+' data-arrdep='+json['arrdep']+' data-fltId='+json['fltId']+'><div class="title clearfix">'+
 						'<i class="logo fl"></i>'+
 						'<p class="name fl">'+json['airlineNameCn']+json['fltNo']+'</p>'+
@@ -733,4 +757,8 @@ subscribeEvent:'DYNAMICS'};
 			}						
 		});
 	}
+	//获取实时消息
+	clearInterval(timer);
+	messageSign();
+	timer=setInterval(messageSign,10000);
 });

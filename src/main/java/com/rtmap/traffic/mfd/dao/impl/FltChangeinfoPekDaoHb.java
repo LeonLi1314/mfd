@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -27,12 +28,23 @@ public class FltChangeinfoPekDaoHb extends DaoHbSupport implements IFltChangeinf
 
 	@Override
 	public int updateExecuted(Integer recId) {
-		Query query = createQuery(
-				"update FltChangeinfoPek set executeFlag = 'Y',updateTime = :updateTime where contractId = :contractId");
+		String queryString = "update FltChangeinfoPek set executeFlag = 'Y',updateTime = :updateTime where recId = :recId";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Query query = session.createQuery(queryString);
+
+//		if (1 / 0 == 0) {
+//
+//		}
+
+		// Query query = createQuery(queryString);
 		query.setTimestamp("updateTime", new Date());
 		query.setInteger("recId", recId);
+		// session.beginTransaction();
+		int i = query.executeUpdate();
+		// session.getTransaction().commit();
+		session.close();
 
-		return query.executeUpdate();
+		return i;
 	}
 
 	@Override
@@ -44,14 +56,22 @@ public class FltChangeinfoPekDaoHb extends DaoHbSupport implements IFltChangeinf
 	@SuppressWarnings("unchecked")
 	// @Transactional(propagation = Propagation.NEVER)
 	public List<FltChangeinfoPek> selectNotExecuted(int limit) {
-		Criteria criteria = createCriteria(FltChangeinfoPek.class);
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+
+		Criteria criteria = session.createCriteria(FltChangeinfoPek.class);
+		// Criteria criteria = createCriteria(FltChangeinfoPek.class);
+		// getHibernateTemplate().getSessionFactory();
+
 		criteria.add(Restrictions.eq("executeFlag", "N"));
 
 		if (limit > 0) {
 			criteria.setMaxResults(limit);
-			criteria.addOrder(Order.asc("create_time"));
+			criteria.addOrder(Order.asc("createTime"));
 		}
 
-		return criteria.list();
+		List<FltChangeinfoPek> rst = criteria.list();
+		session.close();
+
+		return rst;
 	}
 }

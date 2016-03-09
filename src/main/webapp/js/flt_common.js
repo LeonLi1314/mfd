@@ -1,4 +1,6 @@
+var timer=null;
 var oLoad=$('<div class="loading"><i></i></div>');
+document.documentElement.style.fontSize=document.documentElement.clientWidth/18+'px';
 function ajaxInvoke(url,data,successFn)
 {
 	$.ajax({
@@ -52,4 +54,26 @@ function getQueryString(name) {
         return unescape(r[2]);
     }
     return null;
+}
+
+
+//是否有未读消息
+function messageSign()
+{
+	$.ajax({
+		url:'/mfd/msg/getUnreadWechatMsgsCount.do?openId=openId&currAirportCode=PEK',
+		contentType:'application/json',
+		success:function(data)
+		{
+			localStorage.totalCount=data;
+			if(data>0)
+			{
+				$('.sign').show();
+			}
+			else
+			{
+				$('.sign').hide();
+			}
+		}
+	});
 }

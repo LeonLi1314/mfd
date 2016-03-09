@@ -41,7 +41,7 @@ public class FlightChangeHandler implements InitializingBean, DisposableBean {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Thread thread;
 	@Resource
-	private IFltChangeinfoPekDao changetinfoPekDao;
+	private IFltChangeinfoPekDao changeinfoPekDao;
 	@Resource
 	private ISubscribeContractDao subscribeContractDao;
 	@Resource
@@ -49,7 +49,7 @@ public class FlightChangeHandler implements InitializingBean, DisposableBean {
 	/*
 	 * 处理间隔时间
 	 */
-	private int interval = 10;
+	private int interval = 100;
 
 	public int getInterval() {
 		return interval;
@@ -96,7 +96,7 @@ public class FlightChangeHandler implements InitializingBean, DisposableBean {
 
 			if (changeInfo == null) {
 				// 当队列深度小于0时，获取未处理的航班变更信息队列
-				List<FltChangeinfoPek> list = changetinfoPekDao.selectNotExecuted(50);
+				List<FltChangeinfoPek> list = changeinfoPekDao.selectNotExecuted(50);
 
 				if (list == null || list.size() == 0)
 					return;
@@ -108,9 +108,13 @@ public class FlightChangeHandler implements InitializingBean, DisposableBean {
 			System.out.println(String.format("当前队列深度：%s", queue.size()));
 			// 匹配订阅契约，生成推送信息，批量保存
 			List<MsgWechatCenter> msgs = getMsgWechats(changeInfo);
-			msgWechatCenterDao.batchInsert(msgs);
+
+			if (msgs != null && msgs.size() > 0) {
+				msgWechatCenterDao.batchInsert(msgs);
+			}
+
 			// 删除变更信息
-			changetinfoPekDao.updateExecuted(changeInfo.getRecId());
+			changeinfoPekDao.updateExecuted(changeInfo.getRecId());
 		} catch (Exception e) {
 			logger.error(e.toString());
 			e.printStackTrace();
@@ -180,52 +184,52 @@ public class FlightChangeHandler implements InitializingBean, DisposableBean {
 		if (changeInfo.getArrdep().equals(ArrdepFlag.A.toString())) {
 			sb.append("您关注的");
 			sb.append(DomintFlag.valueOf(changeInfo.getDomint()).toLocaleString());
-			sb.append("进港航班[");
+			sb.append("进港航班【");
 			sb.append(changeInfo.getFltNo());
 			sb.append("/");
 			sb.append(DateUtils.formatDate(changeInfo.getSdt()));
-			sb.append("]");
+			sb.append("】");
 
 			if (map.containsKey(FltChangeinfoFiledsConst.fltStateCnAbbr)) {
-				sb.append(String.format("，状态变更为[%s]", map.get(FltChangeinfoFiledsConst.fltStateCnAbbr)));
+				sb.append(String.format("，状态变更为【%s】", map.get(FltChangeinfoFiledsConst.fltStateCnAbbr)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.estTime)) {
-				sb.append(String.format("，预计进港时间为[%s]", map.get(FltChangeinfoFiledsConst.estTime)));
+				sb.append(String.format("，预计进港时间为【%s】", map.get(FltChangeinfoFiledsConst.estTime)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.actTime)) {
-				sb.append(String.format("，实际进港时间为[%s]", map.get(FltChangeinfoFiledsConst.actTime)));
+				sb.append(String.format("，实际进港时间为【%s】", map.get(FltChangeinfoFiledsConst.actTime)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.bltDisp)) {
-				sb.append(String.format("，请于[%s]行李转盘提取您的行李", map.get(FltChangeinfoFiledsConst.bltDisp)));
+				sb.append(String.format("，请于【%s】行李转盘提取您的行李", map.get(FltChangeinfoFiledsConst.bltDisp)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.termOrExitsNo)) {
-				sb.append(String.format("，进港到达口[%s]", map.get(FltChangeinfoFiledsConst.termOrExitsNo)));
+				sb.append(String.format("，进港到达口【%s】", map.get(FltChangeinfoFiledsConst.termOrExitsNo)));
 			}
 
 			sb.append("。");
 		} else {
 			sb.append("您关注的");
 			sb.append(DomintFlag.valueOf(changeInfo.getDomint()).toLocaleString());
-			sb.append("出港航班[");
+			sb.append("出港航班【");
 			sb.append(changeInfo.getFltNo());
 			sb.append("/");
 			sb.append(DateUtils.formatDate(changeInfo.getSdt()));
-			sb.append("]");
+			sb.append("】");
 
 			if (map.containsKey(FltChangeinfoFiledsConst.firstCntOt)) {
 				sb.append(String.format("，目前已开放值机柜台", map.get(FltChangeinfoFiledsConst.firstCntOt)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.fltStateCnAbbr)) {
-				sb.append(String.format("，状态变更为[%s]", map.get(FltChangeinfoFiledsConst.fltStateCnAbbr)));
+				sb.append(String.format("，状态变更为【%s】", map.get(FltChangeinfoFiledsConst.fltStateCnAbbr)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.estTime)) {
-				sb.append(String.format("，预计出港时间为[%s]", map.get(FltChangeinfoFiledsConst.estTime)));
+				sb.append(String.format("，预计出港时间为【%s】", map.get(FltChangeinfoFiledsConst.estTime)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.actTime)) {
-				sb.append(String.format("，实际出港时间为[%s]", map.get(FltChangeinfoFiledsConst.actTime)));
+				sb.append(String.format("，实际出港时间为【%s】", map.get(FltChangeinfoFiledsConst.actTime)));
 			}
 			if (map.containsKey(FltChangeinfoFiledsConst.gatDisp)) {
-				sb.append(String.format("，当前登机口调整为[%s]", map.get(FltChangeinfoFiledsConst.gatDisp)));
+				sb.append(String.format("，当前登机口调整为【%s】", map.get(FltChangeinfoFiledsConst.gatDisp)));
 			}
 
 			sb.append("。");

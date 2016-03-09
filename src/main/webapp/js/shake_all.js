@@ -54,8 +54,6 @@ $(function(){
 	function backFn()
 	{
 		window.history.back();
-		//window.open('shakeportal.html');
-		//$(this).attr('href','shakeportal.html');
 	}
 	$('.back').on('click',backFn);
 });

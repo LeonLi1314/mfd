@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.rtmap.traffic.mfd.cache.FltCache;
 import com.rtmap.traffic.mfd.dao.IFltArrfBeltPekDao;
 import com.rtmap.traffic.mfd.dao.IFltArrfPekDao;
 import com.rtmap.traffic.mfd.dao.IFltChangeinfoPekDao;
@@ -766,11 +767,11 @@ public class FlightPekServiceImpl implements IFlightService {
 		caculateExtendFields(arrf);
 
 		// 获取原到港航班动态
-		ArrfPek originArrfPek = fltArrfPekDao.selectByArrfId(arrf.getArrfId());
+		ArrfPek originArrfPek = getByArrfId(arrf.getArrfId());
 		// 原航班动态不存在，直接保存，返回
 		if (originArrfPek == null) {
 			arrf.setCreateTime(new Date());
-			fltArrfPekDao.insert(arrf);
+			saveArrfPek(arrf);
 			beltPekDao.batchInsert(arrf.getBelts());
 			return;
 		}
@@ -782,7 +783,7 @@ public class FlightPekServiceImpl implements IFlightService {
 			return;
 
 		// 更新航班动态
-		fltArrfPekDao.update(originArrfPek.getArrfId(), differences);
+		updateArrfPekDifferences(arrf, differences);
 		if (differences.containsKey("bltDisp") || differences.containsKey("firstBltOt")) {
 			// TODO:判断是否出现变更
 			beltPekDao.batchInsertAfterDelete(arrf.getBelts());
@@ -899,11 +900,11 @@ public class FlightPekServiceImpl implements IFlightService {
 		caculateExtendFields(depf);
 
 		// 获取原到港航班动态
-		DepfPek originDepfPek = fltDepfPekDao.selectByDepfId(depf.getDepfId());
+		DepfPek originDepfPek = getByDepfId(depf.getDepfId());
 		// 原航班动态不存在，直接保存，返回
 		if (originDepfPek == null) {
 			depf.setCreateTime(new Date());
-			fltDepfPekDao.insert(depf);
+			saveDepPek(depf);
 			// TODO:判断是否出现变更
 			counterPekDao.batchInsert(depf.getCounters());
 			gatePekDao.batchInsert(depf.getGates());
@@ -917,7 +918,7 @@ public class FlightPekServiceImpl implements IFlightService {
 			return;
 
 		// 更新航班动态
-		fltDepfPekDao.update(originDepfPek.getDepfId(), differences);
+		updateDepfPekDifferences(depf, differences);
 		// 值机柜台资源发生变化
 		if (differences.containsKey("cntDisp") || differences.containsKey("firstCntOt")) {
 			counterPekDao.batchInsertAfterDelete(depf.getCounters());
@@ -1056,5 +1057,74 @@ public class FlightPekServiceImpl implements IFlightService {
 		}
 
 		return changeInfo.toString();
+	}
+
+	private ArrfPek getByArrfId(String arrfId) {
+		// 读取缓存
+		ArrfPek arrf = FltCache.<ArrfPek> get(arrfId);
+
+		if (arrf == null) {
+			arrf = fltArrfPekDao.selectByArrfId(arrfId);
+
+			if (arrf != null) {
+				FltCache.put(arrfId, arrf);
+			}
+		}
+
+		return arrf;
+	}
+
+	private void saveArrfPek(ArrfPek arrf) {
+		String arrfId = fltArrfPekDao.insert(arrf);
+
+		if (StringUtils.isNullOrEmpty(arrfId))
+			return;
+
+		// 新增缓存
+		FltCache.put(arrfId, arrf);
+	}
+
+	public void updateArrfPekDifferences(ArrfPek newArrfPek, Map<String, Object> differences) {
+		int i = fltArrfPekDao.update(newArrfPek.getArrfId(), differences);
+
+		if (i <= 0)
+			return;
+
+		// 更新缓存
+		FltCache.put(newArrfPek.getArrfId(), newArrfPek);
+	}
+
+	private DepfPek getByDepfId(String depfId) {
+		DepfPek depf = FltCache.<DepfPek> get(depfId);
+
+		if (depf == null) {
+			depf = fltDepfPekDao.selectByDepfId(depfId);
+
+			if (depf != null) {
+				FltCache.put(depfId, depf);
+			}
+		}
+
+		return depf;
+	}
+
+	private void saveDepPek(DepfPek depf) {
+		String depfId = fltDepfPekDao.insert(depf);
+
+		if (StringUtils.isNullOrEmpty(depfId))
+			return;
+
+		// 新增缓存
+		FltCache.put(depfId, depf);
+	}
+
+	public void updateDepfPekDifferences(DepfPek newDepfPek, Map<String, Object> differences) {
+		int i = fltDepfPekDao.update(newDepfPek.getDepfId(), differences);
+
+		if (i <= 0)
+			return;
+
+		// 更新缓存
+		FltCache.put(newDepfPek.getDepfId(), newDepfPek);
 	}
 }

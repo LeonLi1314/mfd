@@ -32,8 +32,6 @@ $(function(){
 			createDetail(base,details,{first:'行李转盘',second:'转盘开放时间',third:'出租车等待时长',labelStr:''});
 		}else if(base.arrdep=='D')
 		{
-			//console.log(2);
-			//console.log(details.securityColor);
 			createDetail(base,details,{first:'值机柜台',second:'安检等待状态',third:'登机口',labelStr:''});
 		}
 		$('.follow').off('click',followClickEvent).on('click',followClickEvent);
@@ -94,7 +92,6 @@ $(function(){
 							'<p class="name fl">'+base['airlineNameCn']+base['fltNo']+'</p>'+
 						'</div>'+
 						'<div class="sub-title clearfix">'+
-							//'<p>'+details['relFltDesc']+'：'+details['relFltNos']+'</p>'+
 							'<div class="share fl">'+details['relFltDesc']+':</div>'+
 			'<div class="share-flight fl clearfix">'+
 				'<div class="share-flight-cont fl">'+details['relFltNos']+'</div>'+
@@ -188,4 +185,8 @@ $(function(){
 	$('.back').on('click',function(){
 		window.history.back();
 	});
+	//获取实时消息
+	clearInterval(timer);
+	messageSign();
+	timer=setInterval(messageSign,10000);
 });

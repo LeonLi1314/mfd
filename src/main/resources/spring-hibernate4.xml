@@ -74,9 +74,11 @@
 				<prop key="hibernate.connection.SetBigStringTryClob">true</prop>
 				<prop key="hibernate.generate_statistics">true</prop>
 				<prop key="hibernate.jdbc.batch_size">20</prop>
-				<prop key = "hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
 				<prop key="hibernate.query.factory_class">org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory
 				</prop>
+				<!-- Enable Hibernate's automatic session context management -->
+				<!-- <prop key="hibernate.current_session_context_class">thread</prop> -->
 			</props>
 		</property>
 
@@ -130,7 +132,7 @@
 			<tx:method name="update*" propagation="REQUIRED" />
 			<tx:method name="delete*" propagation="REQUIRED" />
 			<tx:method name="handle*" propagation="REQUIRED" />
-			<tx:method name="follow*" propagation="REQUIRED"  />
+			<tx:method name="follow*" propagation="REQUIRED" />
 			<tx:method name="unfollow*" propagation="REQUIRED" />
 			<tx:method name="execute*" propagation="REQUIRED" />
 			<!-- 支持当前事务，如果当前没有事务，就以非事务方式执行。只读 -->
