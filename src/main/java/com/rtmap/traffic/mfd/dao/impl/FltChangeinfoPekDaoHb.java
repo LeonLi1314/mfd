@@ -32,9 +32,9 @@ public class FltChangeinfoPekDaoHb extends DaoHbSupport implements IFltChangeinf
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		Query query = session.createQuery(queryString);
 
-//		if (1 / 0 == 0) {
-//
-//		}
+		if (1 / 0 == 0) {
+
+		}
 
 		// Query query = createQuery(queryString);
 		query.setTimestamp("updateTime", new Date());
@@ -57,10 +57,10 @@ public class FltChangeinfoPekDaoHb extends DaoHbSupport implements IFltChangeinf
 	// @Transactional(propagation = Propagation.NEVER)
 	public List<FltChangeinfoPek> selectNotExecuted(int limit) {
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		// Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 
 		Criteria criteria = session.createCriteria(FltChangeinfoPek.class);
 		// Criteria criteria = createCriteria(FltChangeinfoPek.class);
-		// getHibernateTemplate().getSessionFactory();
 
 		criteria.add(Restrictions.eq("executeFlag", "N"));
 

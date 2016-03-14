@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.rtmap.traffic.mfd.common.XmlDateAdapter;
+import com.rtmap.traffic.mfd.common.XmlDateTimeAdapter;
 
 /**
  * 首都机场到港航班动态信息
@@ -40,7 +40,7 @@ public class ArrfPek {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "sdt", columnDefinition = "DATETIME")
 	@XmlElement(name = "SCHT")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date sdt;
 	@Column(name = "domint", columnDefinition = "CHAR", length = 1)
 	@XmlElement(name = "DORI")
@@ -64,17 +64,17 @@ public class ArrfPek {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "est_time", columnDefinition = "DATETIME")
 	@XmlElement(name = "ESTT")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date estTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "final_time", columnDefinition = "DATETIME")
 	@XmlElement(name = "FIND")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date finalTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "act_time", columnDefinition = "DATETIME")
 	@XmlElement(name = "ACTT")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date actTime;
 	@Column(name = "task_nature", columnDefinition = "CHAR", length = 1)
 	@XmlElement(name = "TASC")
@@ -108,7 +108,7 @@ public class ArrfPek {
 	private String startAirportCn;
 	@Column(name = "start_sdt")
 	@XmlElement(name = "STAS")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date startSdt;
 	@Column(name = "flt_state_code")
 	@XmlElement(name = "FLST")
@@ -122,7 +122,7 @@ public class ArrfPek {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "cancel_time", columnDefinition = "DATETIME")
 	@XmlElement(name = "CANT")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date cancelTime;
 	@Column(name = "delay_reason_code")
 	@XmlElement(name = "DELC")
@@ -136,7 +136,7 @@ public class ArrfPek {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "delay_begin_time", columnDefinition = "DATETIME")
 	@XmlElement(name = "DEST")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date delayBeginTime;
 	@Column(name = "delay_dur", columnDefinition = "INT")
 	@XmlElement(name = "DELD")
@@ -279,32 +279,32 @@ public class ArrfPek {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route1_sdt", columnDefinition = "DATETIME")
 	@XmlElement(name = "RO1S")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date route1Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route2_sdt", columnDefinition = "DATETIME")
 	@XmlElement(name = "RO2S")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date route2Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route3_sdt", columnDefinition = "DATETIME")
 	@XmlElement(name = "RO3S")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date route3Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route4_sdt", columnDefinition = "DATETIME")
 	@XmlElement(name = "RO4S")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date route4Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route5_sdt", columnDefinition = "DATETIME")
 	@XmlElement(name = "RO5S")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date route5Sdt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "route6_sdt", columnDefinition = "DATETIME")
 	@XmlElement(name = "RO6S")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date route6Sdt;
 	@Column(name = "route1_flt_dur", columnDefinition = "INT")
 	@XmlElement(name = "R1FD")

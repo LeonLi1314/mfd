@@ -36,7 +36,22 @@
 	</bean>
 
 	<!-- 动态变更处理线程 -->
-<!-- 	<bean id="FlightChangeHandler" class="com.rtmap.traffic.mfd.service.impl.FlightChangeHandler" /> -->
+<!-- 	<bean id="flightChangeHandler" class="com.rtmap.traffic.mfd.service.impl.FlightChangeHandler" /> -->
+
+
+	<!-- 天气同步线程 -->
+	<bean id="weatherSynchronize" class="com.rtmap.traffic.mfd.service.impl.WeatherSynchronize" init-method="init" destroy-method="destroy" >
+		<property name="httpClient">
+			<ref bean="weatherHttpClient" />
+		</property>
+	</bean>
+
+	<bean id="weatherHttpClient" class="rtmap.frame.util.HttpClientUtils">
+		<property name="scheme" value="http" />
+		<property name="host" value="localhost" />
+		<property name="actionPath" value="/mfd/bas/currentDateTime.do" />
+		<property name="port" value="8080" />
+	</bean>
 </beans>
 
 

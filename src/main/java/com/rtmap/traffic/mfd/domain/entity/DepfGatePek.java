@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.rtmap.traffic.mfd.common.XmlDateAdapter;
+import com.rtmap.traffic.mfd.common.XmlDateTimeAdapter;
 
 /**
  * 首都机场航班登机口资源
@@ -57,22 +57,22 @@ public class DepfGatePek {
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_pot", columnDefinition = "DATETIME")
 	@XmlElement(name = "SCST")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
     private Date gatPot;
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_pct", columnDefinition = "DATETIME")
 	@XmlElement(name = "SCET")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
     private Date gatPct;
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_ot", columnDefinition = "DATETIME")
 	@XmlElement(name = "ACST")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
     private Date gatOt;
     @Temporal(TemporalType.TIMESTAMP)
    	@Column(name = "gat_ct", columnDefinition = "DATETIME")
 	@XmlElement(name = "ACET")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
     private Date gatCt;
 
     public Integer getGatId() {

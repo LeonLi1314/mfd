@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @author liqingshan 2016-02-15
  *
  */
-public class XmlDateAdapter extends XmlAdapter<String, Date> {
-	private String pattern = "yyyy-MM-dd";
+public class XmlDateTimeAdapter extends XmlAdapter<String, Date> {
+	private String pattern = "yyyy-MM-dd HH:mm:ss";
 	private SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 
 	@Override

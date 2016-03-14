@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.rtmap.traffic.mfd.common.XmlDateAdapter;
+import com.rtmap.traffic.mfd.common.XmlDateTimeAdapter;
 
 /**
  * 首都机场航班行李转盘资源
@@ -47,22 +47,22 @@ public class ArrfBeltPek {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_ot", columnDefinition = "DATETIME")
 	@XmlElement(name = "SCST")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date bltOt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_ct", columnDefinition = "DATETIME")
 	@XmlElement(name = "SCET")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date bltCt;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_fbag_time", columnDefinition = "DATETIME")
 	@XmlElement(name = "FIBT")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date bltFbagTime;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "blt_lbag_time", columnDefinition = "DATETIME")
 	@XmlElement(name = "LABT")
-	@XmlJavaTypeAdapter(value = XmlDateAdapter.class)
+	@XmlJavaTypeAdapter(value = XmlDateTimeAdapter.class)
 	private Date bltLbagTime;
 	@Column(name = "blt_domint", columnDefinition = "CHAR", length = 1)
 	@XmlElement(name = "DORI")
